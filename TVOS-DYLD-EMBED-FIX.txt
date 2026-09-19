@@ -1,0 +1,8 @@
+GhostStreamTV TVVLCKit launch/embedding fix
+
+TVVLCKit 3.6.0 is a dynamic XCFramework. The target keeps @executable_path/Frameworks
+in LD_RUNPATH_SEARCH_PATHS and an Embed TVVLCKit phase that copies the correct
+bundled slice into GhostStreamTV.app/Frameworks and signs it for device builds.
+
+The framework itself is bundled under Frameworks/TVVLCKit.xcframework, so no
+first-build download is required.

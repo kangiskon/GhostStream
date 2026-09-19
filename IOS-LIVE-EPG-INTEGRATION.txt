@@ -1,0 +1,11 @@
+GhostStream iOS / iPadOS Live EPG integration
+
+Included in this build:
+- Live channel rows now show NOW / NEXT programme data when EPG is available
+- Live channel rows include a compact progress bar and time range
+- Live player overlay now shows a compact Now/Next EPG card above the controls
+- Existing full-frame live playback and hidden title behavior are preserved
+
+Primary files updated:
+- GhostStream/Views/LiveView.swift
+- GhostStream/Views/PlayerView.swift

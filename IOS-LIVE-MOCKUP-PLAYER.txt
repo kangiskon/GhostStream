@@ -1,0 +1,14 @@
+GhostStream Xcode 26.5 - Live Player Mockup UI
+
+The iPhone/iPad Live player has been rebuilt to closely match the approved GhostStream mockup:
+- Back button whenever controls are visible
+- Live video remains full-frame/aspect-fit to protect sports scoreboards
+- full right-side provider EPG panel using exact stream_id short EPG data
+- current programme highlighted with purple neon styling
+- upcoming programme list
+- bottom channel/program information and EPG progress
+- Favorite, -10s, Pause/Resume, +10s, LIVE, Channels, Audio, Subtitles and More controls
+- controls/guide hide and return on screen tap
+- Movies/Series keep their existing VOD playback controls
+
+Provider EPG remains exact-stream based: get_short_epg&stream_id=<stream id>.

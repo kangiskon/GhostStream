@@ -1,0 +1,7 @@
+GhostStream iOS/iPadOS Live full-frame update
+
+- Live playback uses aspect-fit so scoreboards and edge graphics are not cropped.
+- Movies and Series remain aspect-fill for immersive full-screen playback.
+- The Live channel name is shown only until playback begins, then hidden.
+- Tap-to-show Back / Pause-Resume / timeline controls remain unchanged.
+- Existing Favorites and source auto-load fixes are preserved.

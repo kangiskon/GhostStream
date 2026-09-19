@@ -1,0 +1,11 @@
+GhostStream Xcode 26.5 — exact provider Live EPG
+
+Live guide data now comes from the Xtream provider's per-stream short EPG API:
+  player_api.php?action=get_short_epg&stream_id=<exact stream id>
+
+Behavior:
+- No global guide/channel-name matching is used for Xtream Live EPG.
+- Each visible Live channel loads/caches NOW/NEXT data for its exact stream_id.
+- The Live player reuses the exact same stream_id guide data.
+- Implemented for iPhone/iPad and Apple TV.
+- Existing playback, favorites, source auto-load, navigation and VLC fixes are preserved.

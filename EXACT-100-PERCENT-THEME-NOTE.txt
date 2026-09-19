@@ -1,0 +1,3 @@
+GhostStream exact-theme build
+
+This build uses visual crops from the user-approved GhostStream mockup for the app icon, wordmark, hero ghost and splash artwork, and aligns SwiftUI surfaces to its black/cyan design. Dynamic provider content (titles, posters, categories, counts) naturally changes based on the connected source and device size.

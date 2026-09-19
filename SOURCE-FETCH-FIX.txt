@@ -1,0 +1,15 @@
+GhostStream Source Fetch Fix
+
+Changes in this build:
+- A failed Xtream library load is no longer marked as successfully loaded.
+- Provider/M3U Connect now fetches the source before closing the setup screen.
+- Xtream content fetches are staged instead of sending six requests at once.
+- Live is fetched first, followed by Movies and Series.
+- Category failure no longer automatically discards a successfully fetched stream list.
+- A provider that authenticates but returns zero Live/Movies/Series items is treated as an error instead of a successful empty source.
+- Saved sources explicitly reload even when selecting the same source again.
+- Imported local M3U playlists load before the launcher closes.
+- Pasted M3U text with zero playable entries is rejected instead of being marked loaded.
+- Remote M3U requests use a timeout, explicit Accept/User-Agent headers, and report empty/non-playlist responses.
+- Xtream API requests include an explicit GhostStream User-Agent for better panel/proxy compatibility.
+- Applied to iPhone/iPad and Apple TV targets.

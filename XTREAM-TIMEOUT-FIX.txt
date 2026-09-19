@@ -1,0 +1,7 @@
+GhostStream provider connection fix
+
+- Server entries without a scheme now default to HTTPS instead of HTTP.
+- Explicit http:// addresses are still respected for legacy providers.
+- Provider API requests now time out after 20 seconds instead of waiting on the system default.
+- Timeout, DNS, and connection failures display a clear server/scheme/port message without echoing credentials.
+- Applied to both iPhone/iPad and Apple TV clients.

@@ -1,0 +1,10 @@
+GhostStream iPhone/iPad Playback + Settings + Icon Fix
+
+- Added a dedicated transparent tap catcher above AVPlayer/VLC surfaces so taps reliably reveal controls in portrait and landscape.
+- Replaced close X with a visible Back chevron.
+- Added visible PAUSE / RESUME labeling.
+- VOD and episode playback keeps seek/scrub support; Live exposes the slider only when the stream provides a seekable/DVR window.
+- Wired Player Settings, Playback Options, Privacy and App Style rows to working information sheets.
+- Kept Add Source and Saved Sources actions wired and explicitly passed required environment objects to Add Source.
+- Enlarged the iPhone/iPad GhostStream app-icon artwork while preserving safe edge margins.
+- Based on the Xcode 26.5 Live-fixed build.

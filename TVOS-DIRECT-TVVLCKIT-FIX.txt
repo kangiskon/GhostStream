@@ -1,0 +1,11 @@
+GhostStreamTV direct TVVLCKit integration — self-contained
+
+The old VLCKit Swift Package dependency remains removed. TVVLCKit 3.6.0 is now
+bundled directly at Frameworks/TVVLCKit.xcframework.
+
+There is no build-time network installer. The Embed TVVLCKit phase selects the
+correct tvOS device/simulator framework slice, copies it into the app Frameworks
+folder, and signs it for device/archive builds.
+
+No CocoaPods, Terminal install, Swift Package resolution, or VideoLAN download is
+required to build this package.

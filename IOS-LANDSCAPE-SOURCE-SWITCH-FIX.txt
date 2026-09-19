@@ -1,0 +1,6 @@
+GhostStream iOS/iPadOS Xcode 26.5 update
+
+- Native AVPlayer video now uses resizeAspectFill and clips to its full-screen surface, allowing minimal crop instead of landscape letterboxing.
+- Compatibility-player drawable clips to its full-screen bounds.
+- Saved source switching now loads and validates the selected source before setting it active, preventing the active-source reload task from racing the picker.
+- EPG state is cleared before switching and reloaded for the selected provider when applicable.

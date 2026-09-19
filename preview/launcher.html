@@ -1,0 +1,43 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+html,body{width:711px;height:400px;overflow:hidden}
+.stage{position:relative;width:711px;height:400px;background:#0d0b16;overflow:hidden}
+.stage:before{content:'';position:absolute;top:-40%;left:-10%;width:70%;height:120%;background:radial-gradient(circle at 30% 30%,rgba(124,92,255,.45),transparent 60%);filter:blur(10px)}
+.stage:after{content:'';position:absolute;bottom:-50%;right:-15%;width:75%;height:130%;background:radial-gradient(circle at 70% 70%,rgba(124,92,255,.20),transparent 62%)}
+.wrap{position:relative;z-index:2;padding:26px 34px}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.brand svg{filter:drop-shadow(0 0 8px rgba(124,92,255,.8))}
+.brand .name{font-weight:800;letter-spacing:1px;font-size:20px;color:#fff}
+.brand .name b{color:#7C5CFF}
+.brand .pro{font-size:11px;font-weight:700;color:#b9a9ff;border:1px solid rgba(124,92,255,.5);padding:1px 6px;border-radius:5px;margin-left:2px}
+.panel{background:rgba(30,26,48,.72);border:1px solid rgba(124,92,255,.18);border-radius:22px;padding:22px 26px 26px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}
+.btn{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.96);border-radius:12px;padding:13px 16px;color:#1a1730;font-weight:700;font-size:12.5px;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+.btn .ic{width:28px;height:28px;flex:0 0 28px;display:flex;align-items:center;justify-content:center;border-radius:7px;background:rgba(124,92,255,.14)}
+.btn .ic svg{width:16px;height:16px;stroke:#7C5CFF;fill:none;stroke-width:2}
+.btn .tx{flex:1;line-height:1.15}
+.btn .ch{color:#8a83a6;font-size:16px;font-weight:700}
+.btn.primary{background:linear-gradient(100deg,#7C5CFF,#9b7bff);color:#fff;box-shadow:0 10px 26px rgba(124,92,255,.55)}
+.btn.primary .ic{background:rgba(255,255,255,.22)}
+.btn.primary .ic svg{stroke:#fff}
+.btn.primary .ch{color:rgba(255,255,255,.85)}
+.center{display:flex;justify-content:center;margin-top:14px}
+.btn.small{flex:0 0 auto;min-width:180px;justify-content:center;gap:10px}
+.foot{position:absolute;bottom:14px;left:0;right:0;text-align:center;color:#b9b3cc;font-size:11px;z-index:2}
+.foot b{color:#fff;text-decoration:underline}
+</style></head><body>
+<div class="stage"><div class="wrap">
+  <div class="brand">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="#7C5CFF"><path d="M12 2C7.6 2 4 5.6 4 10v10l2.2-1.6L8.4 20l2.2-1.6L12.8 20l2.2-1.6L17.2 20l2.8-2V10c0-4.4-3.6-8-8-8z"/><circle cx="9.3" cy="10" r="1.3" fill="#0d0b16"/><circle cx="14.7" cy="10" r="1.3" fill="#0d0b16"/></svg>
+    <span class="name">GHOST<b>STREAM</b></span><span class="pro">PLAYER</span>
+  </div>
+  <div class="panel"><div class="grid">
+    <div class="btn primary"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h11M4 12h11M4 18h7"/><path d="M17 15l4 3-4 3z" fill="#fff" stroke="none"/></svg></span><span class="tx">LOAD YOUR PLAYLIST OR FILE/URL</span><span class="ch">&#8250;</span></div>
+    <div class="btn"><span class="ic"><svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M11 18h2"/></svg></span><span class="tx">LOAD FROM DEVICE (M3U FILE)</span><span class="ch">&#8250;</span></div>
+    <div class="btn"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="8" cy="12" r="4"/><path d="M11 12h9M17 12v4M20 12v3"/></svg></span><span class="tx">LOGIN WITH XTREAM CODES API</span><span class="ch">&#8250;</span></div>
+    <div class="btn"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4z" fill="#7C5CFF" stroke="none"/></svg></span><span class="tx">PLAY SINGLE STREAM</span><span class="ch">&#8250;</span></div>
+  </div>
+  <div class="center"><div class="btn small"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 11a3 3 0 000-6M21 20c0-2-1.5-3.5-4-4"/></svg></span><span class="tx">SAVED SOURCES</span><span class="ch">&#8250;</span></div></div>
+  </div>
+</div><div class="foot">By using this application, you agree to the <b>Terms of Service.</b></div></div>
+</body></html>

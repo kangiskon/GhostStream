@@ -1,0 +1,31 @@
+GhostStream Apple TV — Standard Genre Organization
+
+Movies and Series are now grouped into stable GhostStream genres instead of the provider's raw category list.
+
+Genres:
+- Action & Adventure
+- Comedy
+- Drama
+- Horror
+- Kids & Family
+- Documentary
+- Sci-Fi & Fantasy
+- Thriller & Mystery
+- Romance
+- Crime
+- Animation
+- Reality
+- Sports
+- Music
+- Western
+- War & History
+- Other
+
+Behavior:
+- Movies and Series are classified independently.
+- Original provider category IDs remain untouched for source integrity.
+- Mixed provider categories can appear in more than one standard genre.
+- Series can also use plot text to improve classification.
+- Empty genre buttons are hidden.
+- Each genre button shows a title count.
+- Raw provider prefixes/quality labels no longer clutter the Apple TV category rail.

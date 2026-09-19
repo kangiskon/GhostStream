@@ -1,0 +1,9 @@
+GhostStream Xcode 26.6 Compatibility
+====================================
+
+This project is marked for Xcode 26.6 / build tools 26.6.
+The iOS deployment target remains iOS 16.0.
+The tvOS deployment target remains tvOS 16.0.
+The iOS target remains universal for iPhone and iPad (device family 1,2).
+Bundled MobileVLCKit and TVVLCKit xcframeworks remain self-contained.
+Swift language compatibility remains Swift 5.0 with minimal strict concurrency.

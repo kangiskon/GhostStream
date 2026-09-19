@@ -1,0 +1,15 @@
+GhostStream Apple TV Remote Focus Fix
+
+Issue:
+- The APK-style persistent top navigation could not be reliably reached/identified with the Apple TV Remote/controller.
+- Home/Movies/TV Shows/Live TV/Sources had no explicit tvOS FocusState/focusSection.
+- The custom button style only showed a pressed state, so there was no reliable top-bar focus indicator.
+
+Fix:
+- Added explicit TVTopFocus identities.
+- Added @FocusState to TVTopNavigation.
+- Bound every section button and Sources/gear button to FocusState.
+- Marked the top HStack as a tvOS focus section.
+- Added a visible purple focus ring/scale/glow for the focused top item.
+- Kept the active-section state separate from focus.
+- Preserved poster-only focus rings for Movies/TV Shows.

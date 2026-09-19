@@ -1,0 +1,10 @@
+GhostStream performance pass
+
+- Native playback now tries HLS, then the original provider URL, before compatibility fallback.
+- Native HLS peak bitrate capped for smoother landscape playback.
+- Player UI state updates reduced to lower SwiftUI/main-thread pressure.
+- Compatibility network/live cache increased to 3.5 seconds.
+- Compatibility timeline publishing reduced to ~2 Hz.
+- Full-screen player state transactions do not animate.
+- Expensive cyan glow shadows removed from persistent themed screens while retaining the approved layout/colors.
+- Background compositing simplified.

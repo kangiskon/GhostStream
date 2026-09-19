@@ -1,0 +1,5 @@
+GhostStreamTV playback compatibility
+
+GhostStreamTV uses AVPlayer first and bundled VideoLAN TVVLCKit 3.6.0 as its
+internal compatibility fallback. The official TVVLCKit XCFramework is included
+inside Frameworks/; it is not downloaded during the build.

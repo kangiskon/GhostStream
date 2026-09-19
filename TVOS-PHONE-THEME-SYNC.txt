@@ -1,0 +1,13 @@
+GhostStream tvOS Phone Theme Sync
+
+This build synchronizes the Apple TV visual system with the iPhone/iPad GhostStream theme while retaining tvOS-specific layout and remote focus behavior.
+
+Included:
+- Exact iPhone/iPad accent, background, card, card2, muted, border and card-gradient tokens
+- Same GhostHeroExact masked hero treatment
+- Same GhostBrandExact and GhostWordmark assets
+- Cyan/black focus treatment for Apple TV Remote navigation
+- Removed default gray tvOS .card button chrome from GhostStream media/category surfaces
+- Themed provider/M3U input fields and source buttons
+- GhostStream-branded headers on Live TV, Movies and Series
+- Retains clean 16:9 Live TV cards, 2:3 Movie/Series posters, standard genres, progressive paging, image cache and hybrid playback

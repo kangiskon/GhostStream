@@ -1,0 +1,12 @@
+GhostStream Apple TV — Progressive Movies/Series Performance
+
+Changes in this build:
+- Movies and Series start with 60 cards instead of constructing the entire provider library.
+- The grid automatically expands by 36 items as the viewer reaches the last visible row.
+- Poster artwork uses a shared URLSession limited to 4 connections per host.
+- Poster images are cached in NSCache with a 96 MB decoded-image budget.
+- URLCache provides a bounded 64 MB memory / 256 MB disk network cache.
+- Artwork decoding occurs on URLSession callback threads, not the tvOS main thread.
+- Standard genre indexing is built on the generic executor and yields every 500 items.
+- Movies/Series are published before genre classification completes, so All Movies / All Series can appear sooner.
+- Existing clean Apple TV card layout and playback/source logic are retained.

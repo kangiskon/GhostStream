@@ -1,0 +1,16 @@
+GhostStream - App Store submission notes
+
+Product positioning
+- General media player for user-provided, authorized media sources.
+- No channels, movies, series, subscriptions, playlists, credentials, or providers are bundled or sold by GhostStream.
+- Users must confirm they have permission to access content before saving a new service.
+
+Saved services
+- Log Out / Switch Service disconnects the active source without deleting it.
+- Playlist URLs, pasted/imported playlists, and provider logins remain in Saved Services until the user explicitly deletes them.
+- Do not ship test provider credentials or copyrighted channel artwork in the App Store build.
+
+Before App Store Connect submission
+- Replace any placeholder privacy-policy/support URLs in App Store Connect with your published pages.
+- Supply App Review with legal test content / demo access if review cannot exercise the player otherwise.
+- Confirm third-party framework licensing/attribution requirements for all embedded dependencies.

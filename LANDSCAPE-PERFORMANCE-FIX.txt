@@ -1,0 +1,10 @@
+GhostStream Landscape Performance Fix
+
+This build prevents SwiftUI orientation/layout updates from repeatedly reattaching the video render surface.
+
+Changes:
+- MobileVLCKit drawable is assigned only when the backing UIView actually changes.
+- AVPlayerLayer player is assigned only when needed.
+- Existing buffering and UI throttling remain in place.
+
+This specifically targets playback that is smooth in portrait but becomes sluggish after rotating to landscape.

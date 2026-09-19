@@ -1,0 +1,11 @@
+GhostStream Movies + Series fix
+
+- Apple TV now filters Movies and Series using the provider's category_id values.
+- Added All/category focus strip to both tvOS libraries.
+- Movie and Series artwork URLs are normalized for absolute, protocol-relative,
+  provider-relative, and space-containing URLs.
+- Added alternate poster fields (stream_icon, movie_image, cover_big, cover).
+- VOD and episode direct_source is decoded and preferred when supplied by provider.
+- Constructed /movie/ and /series/ URLs remain the fallback when direct_source is absent.
+- Container extensions are normalized before stream URL generation.
+- Applied shared API/model fixes to iPhone/iPad and Apple TV.

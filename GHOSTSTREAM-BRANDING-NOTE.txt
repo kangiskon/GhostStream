@@ -1,0 +1,10 @@
+GhostStream — clean player branding build
+
+User-facing playback UI is GhostStream-only.
+- No VLC logo.
+- No "VLC Engine" label.
+- No "Powered by VLC" label.
+- No external VLC app button or URL scheme.
+- No framework/dependency names shown in playback errors.
+
+The internal playback framework remains linked only as an implementation dependency.

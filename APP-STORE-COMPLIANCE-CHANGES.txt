@@ -1,0 +1,18 @@
+GhostStream App Store + Saved Services Update
+
+Included changes
+- Added Log Out / Switch Service without deleting saved source information.
+- Added Saved Services picker for Playlist URL, imported/pasted playlist, and Provider Login sources.
+- Provider passwords are stored in the iOS Keychain and removed from UserDefaults during migration.
+- Deleting a saved Provider Login removes its Keychain password.
+- Logging out disconnects the active source and clears the loaded library/EPG only; saved services remain.
+- Renamed user-facing Xtream labels to generic Provider Login wording while retaining compatibility internally.
+- Added content-rights acknowledgement when adding a playlist URL, pasted playlist, provider login, imported M3U file, or direct stream.
+- Added Settings disclosures explaining GhostStream is a general media player and does not provide/sell/bundle content or subscriptions.
+- Added App Store submission notes. No provider credentials or content are bundled.
+
+Before submitting
+- Publish a real Privacy Policy and Support page and enter those URLs in App Store Connect.
+- Make sure any screenshots/marketing do not imply GhostStream provides copyrighted channels, movies, or subscriptions.
+- Give App Review a legal test source/demo if they need one to review playback.
+- Confirm licensing/attribution obligations for embedded third-party libraries before distribution.

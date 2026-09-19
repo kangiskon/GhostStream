@@ -1,0 +1,9 @@
+GhostStream — MobileVLCKit is already bundled
+
+No download or manual installation is required.
+
+The complete framework is included at:
+  Frameworks/MobileVLCKit.xcframework
+
+The Xcode target links it and the Embed MobileVLCKit phase copies/signs the correct
+iPhone/iPad device or simulator framework slice.

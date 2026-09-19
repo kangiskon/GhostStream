@@ -1,0 +1,14 @@
+GhostStream Apple TV Movies/Series Navigation Performance Fix
+
+Root cause:
+The standard-genre UI repeatedly classified the entire Movies and Series libraries during SwiftUI body evaluation. It did this to discover available genres, calculate every count, filter the selected genre, and label visible cards. Large provider libraries could block the tvOS main thread when opening Movies or Series.
+
+Fix:
+- Classify each Movie exactly once when provider VOD data loads.
+- Classify each Series title exactly once when provider Series data loads.
+- Cache genre buckets and title-to-genre mappings in LibraryViewModel.
+- Movies/Series navigation now uses O(1) bucket/count lookups instead of repeated full-library classification.
+- Provider category IDs and the standard GhostStream genres are unchanged.
+- Live TV and iPhone/iPad code are unchanged.
+
+The tvOS simulator may still print QUIC protocol-handler warnings; those are separate from this UI-navigation fix.

@@ -1,0 +1,10 @@
+GhostStream tvOS Live / Remote Navigation Fix (Xcode 26.5)
+
+- Top navigation order is now LIVE | VOD | SERIES | Sources gear.
+- Live is the default section when the Apple TV interface opens.
+- Live provider-category buttons use explicit tvOS FocusState targets and a focus section.
+- Live channel rows use explicit focus targets and a separate focus section.
+- Settings/source setup controls have explicit focus targets from source type through Connect and saved sources.
+- Xtream .ts Live streams use the embedded TVVLCKit compatibility player directly instead of first guessing a .m3u8 URL through AVPlayer.
+- HLS and other native formats continue to use AVPlayer first.
+- Live list rows continue to show provider channel logos; video playback starts when a channel is selected.

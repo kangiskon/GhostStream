@@ -1,0 +1,7 @@
+GhostStream Apple TV compatibility fix
+
+Fixed Xcode/tvOS compile error:
+  'roundedBorder' is unavailable in tvOS
+
+The Apple TV source-login fields now use a custom GhostStream tvOS-safe style instead of RoundedBorderTextFieldStyle.
+No iPhone/iPad source files were changed by this patch.

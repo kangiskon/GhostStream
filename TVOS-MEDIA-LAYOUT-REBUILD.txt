@@ -1,0 +1,22 @@
+GhostStream Apple TV Media Layout Rebuild
+
+Live TV
+- Fixed-width 16:9 channel cards.
+- Channel logos use scaled-to-fit so they are not cropped or stretched.
+- Titles are clamped to two lines and stay inside the card width.
+- Provider category names are cleaned for display and shown in a compact rail.
+- Grid adapts to available tvOS width and caps at five cards across.
+
+Movies / Series
+- Fixed portrait 2:3 poster cards.
+- Poster images fill the portrait card rather than sitting tiny inside a large gray cell.
+- Titles are clamped to two lines.
+- Primary standard genre appears beneath the title.
+- Grid adapts to available tvOS width and caps at six posters across.
+- Media links use GhostStream's own presentation instead of the default gray tvOS card surface.
+
+Categories
+- Compact category chips with reduced height and spacing.
+- Genre caches remain in use, so opening Movies/Series does not reclassify the full library.
+
+No provider, source-fetch, or playback logic was intentionally changed by this UI rebuild.

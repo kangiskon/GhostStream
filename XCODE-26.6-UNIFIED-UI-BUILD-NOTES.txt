@@ -1,0 +1,25 @@
+GhostStream Xcode 26.6 Unified iPhone / iPad / Apple TV UI Build
+================================================================
+
+This test build targets Xcode 26.6 project metadata and preserves the existing iOS 16.0 / tvOS 16.0 deployment floors.
+
+Unified UI changes:
+- iPhone: bottom tabs remain Home / Live / Movies / Series / Sources.
+- iPad: TV-style top navigation with no persistent left sidebar.
+- iPhone/iPad Home: same black/purple GhostStream visual language and GhostHomeHero artwork as Apple TV.
+- Live TV: iPhone tap-to-preview; iPad delayed muted preview (~0.75 s); full category names may wrap to two lines.
+- Movies/Series: responsive TV-style card grids and purple category chips.
+- Sources/Settings: unified black/purple styling; Settings opens from gear and includes a close control.
+- Player: channel/movie/episode title clutter removed from playback chrome; existing controls, AVPlayer/VLCKit fallback, resume, media tracks, and episode transition protection retained.
+- tvOS: UI/behavior intentionally left unchanged apart from Xcode 26.6 project metadata.
+
+Verification completed in the build container:
+- Unified UI regressions: PASS
+- iOS Live/VOD/source/episode regressions: PASS
+- tvOS Home/Live/player/menu/VOD regressions: PASS
+- Bundled MobileVLCKit/TVVLCKit checks: PASS
+- Xcode 26.6 project metadata regression: PASS
+- swiftc -parse: 26 Swift source files parsed successfully
+
+Important:
+This Linux build environment does not contain Apple Xcode, iOS/tvOS SDKs, or xcodebuild. Open and compile this project in Xcode 26.6 on macOS for final compiler, signing, simulator, and device verification.

@@ -1,0 +1,8 @@
+GhostStreamTV automatic compatibility engine
+
+TVVLCKit 3.6.0 is bundled directly in this package at:
+  Frameworks/TVVLCKit.xcframework
+
+The Apple TV player can use AVPlayer for compatible streams and automatically use
+the embedded TVVLCKit compatibility path where the project requires it. No
+framework download is performed during the Xcode build.

@@ -1,0 +1,29 @@
+GhostStream — Xcode 26.5 self-contained maintenance build
+==========================================================
+
+This package keeps the current GhostStream UI, provider categories, Remote-focus
+fixes, Live exact-stream EPG, and playback behavior while using Xcode 26.5 project
+settings.
+
+Playback frameworks are bundled in the project:
+- Frameworks/MobileVLCKit.xcframework (iPhone/iPad)
+- Frameworks/TVVLCKit.xcframework (Apple TV)
+
+No VLC framework download is performed during an Xcode build. The Embed phases
+select the correct device/simulator slice and sign the dynamic framework on device
+builds.
+
+Compatibility choices:
+- Swift language mode remains 5.0.
+- Swift strict concurrency is minimal.
+- iOS deployment target remains iOS 16.0.
+- tvOS deployment target remains tvOS 16.0.
+- User Script Sandboxing remains disabled for the local VLC embed/sign phases.
+
+In Xcode 26.5:
+1. Open GhostStream.xcodeproj for iPhone/iPad or GhostStreamTV.xcodeproj for Apple TV.
+2. Select your Signing Team under Signing & Capabilities.
+3. Product > Clean Build Folder.
+4. Choose a simulator/device and Run.
+
+No CocoaPods, VLC installer, Terminal dependency install, or framework download is required.

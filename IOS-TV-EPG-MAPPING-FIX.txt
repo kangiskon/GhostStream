@@ -1,0 +1,7 @@
+GhostStream EPG mapping fix
+
+- EPG loading is now independent from media-library loading.
+- XMLTV channel IDs are matched by exact provider IDs first.
+- If provider IDs do not match XMLTV IDs, GhostStream falls back to normalized channel display-name matching.
+- Common provider prefixes/suffixes (USA |, HD, FHD, UHD, 4K, 1080p, 720p) are normalized for matching.
+- The same resolver is used on iPhone/iPad and Apple TV.

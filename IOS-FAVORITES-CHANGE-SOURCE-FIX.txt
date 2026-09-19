@@ -1,0 +1,10 @@
+GhostStream Xcode 26.5 - iPhone/iPad Favorites + Change Source Back
+
+- Persistent provider-scoped Favorites for Live, VOD/Movies, and Series.
+- Live FAVORITES segment opens saved Live channels.
+- Movies FAVORITES segment filters saved movies.
+- Series FAVORITES segment filters saved shows.
+- Heart buttons toggle favorite state directly on media rows/posters.
+- Change Source now has a visible Back control.
+- Opening Change Source no longer disconnects the active service; backing out preserves it.
+- Existing Xcode 26.5, player controls, Settings, icon, Apple TV Live, and VLC fixes preserved.

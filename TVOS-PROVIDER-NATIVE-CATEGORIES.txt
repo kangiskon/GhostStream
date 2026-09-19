@@ -1,0 +1,20 @@
+GhostStream Apple TV - Provider Native Categories
+
+Apple TV now uses the source/provider's real category structure instead of GhostStream-defined standard genres.
+
+Xtream:
+- Live TV: get_live_categories + category_id
+- Movies: get_vod_categories + category_id
+- Series: get_series_categories + category_id
+
+M3U:
+- Live TV categories come from group-title in first-seen playlist order.
+
+Behavior:
+- Provider category order is preserved.
+- Empty provider categories are hidden.
+- "All Channels", "All Movies", and "All Series" remain available.
+- Category switching uses cached category-ID buckets instead of re-filtering the entire library.
+- Movie/Series cards show the provider category name as metadata.
+- The old standard-genre classification is no longer used by the Apple TV presentation layer.
+- Existing progressive paging, poster cache, clean tvOS layout, theme sync, source fetching, and playback logic are retained.

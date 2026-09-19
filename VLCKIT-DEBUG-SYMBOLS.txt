@@ -1,0 +1,16 @@
+GhostStream bundled VLCKit runtime frameworks
+==============================================
+
+This package includes the complete runtime MobileVLCKit and TVVLCKit framework
+slices needed to build and run GhostStream on iPhone/iPad and Apple TV.
+
+The very large third-party VLC dSYM/BCSymbolMap bundles were intentionally left
+out of this downloadable source package because they are not runtime dependencies
+and would add well over 1 GB uncompressed. The framework manifests were updated so
+Xcode does not reference missing symbol folders.
+
+This does not require an App Store customer to install anything. GhostStream still
+embeds the required dynamic VLC framework inside the built app.
+
+If third-party VLC crash symbolication is ever needed, the original official
+VideoLAN 3.6.0 binary archives can be kept separately by the developer.

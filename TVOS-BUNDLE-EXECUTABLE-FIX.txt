@@ -1,0 +1,17 @@
+GhostStreamTV tvOS bundle install fix
+
+Fixed simulator/device install error:
+"GhostStreamTV.app has missing or invalid CFBundleExecutable in its Info.plist"
+
+Root cause:
+GhostStreamTV uses a custom Info.plist with GENERATE_INFOPLIST_FILE = NO, but CFBundleExecutable was missing.
+
+Fix:
+Added:
+<key>CFBundleExecutable</key>
+<string>$(EXECUTABLE_NAME)</string>
+
+Verification:
+- tvOS Info.plist regression check passes
+- plutil reports Info.plist OK
+- Xcode target is an application product and produces GhostStreamTV.app

@@ -1,0 +1,26 @@
+NOTE: VLC frameworks are bundled in this self-contained Xcode 26.5 package. Any older download/manual-install instructions below are superseded.
+
+GhostStream APK-Style Theme Build
+=================================
+
+Apple TV UI
+- Black/purple APK-inspired visual system (#0B0B0F + #7C5CFF)
+- Top navigation: Home / Movies / TV Shows / Live TV / Sources
+- Home hero banner and horizontal media rails
+- Movies and Series use poster-only purple focus rings
+- Series detail screen includes clean season selector and episode cards
+- Episode metadata uses provider thumbnail/duration/plot when available
+- Live TV uses a category sidebar plus compact channel rows
+- Provider-native categories and progressive media paging remain enabled
+- TVVLCKit direct-download, embed and dyld fixes remain included
+
+App icons
+- iPhone/iPad AppIcon is generated from the supplied 9n.png Ghost Stream logo
+- Apple TV includes layered small/large app icon stacks generated from the same logo
+- Apple TV Top Shelf imagery is generated from the same branding
+
+Projects
+- iPhone/iPad: GhostStream.xcodeproj
+- Apple TV: GhostStreamTV.xcodeproj
+
+First Apple TV build may download TVVLCKit. Let the install phase finish before running.

@@ -1,0 +1,22 @@
+GhostStream Exact Concept Theme Build
+
+This build is based on the approved black/cyan GhostStream concept and keeps the latest hybrid player + landscape performance fixes.
+
+Visual changes:
+- Cyan/black ghost branding across launcher, intro, home, Live TV, Movies, Series, Settings.
+- Approved ghost artwork integrated as original GhostStream assets.
+- Home uses the concept's 2x2 Live TV / Movies / Series / Saved Sources layout.
+- Live TV uses the concept's search, All/Favorites/Recent segmented control and category rows.
+- Movies/Series use the concept's compact 3-column poster layout with cyan segmented filters.
+- Settings uses concept-style dark rows with cyan icons and borders.
+- Launcher no longer uses the older purple visual style.
+- Existing app icon retained.
+
+Playback:
+- Latest AVPlayer-first hybrid engine retained.
+- Compatibility fallback retained.
+- Landscape performance fix retained.
+- VLC remains hidden from user-facing UI.
+
+Content:
+- No copyrighted movie/TV artwork is bundled. Poster/channel art comes only from the user's authorized source.

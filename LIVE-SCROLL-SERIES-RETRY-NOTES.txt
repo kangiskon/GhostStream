@@ -1,0 +1,17 @@
+GhostStream Xcode 26.6 — iPhone/iPad Live scrolling & intermittent Series request fix
+
+Live:
+- Phone/iPad channel lists build rows in windows of 64 and expand on demand.
+- Reset the window after source, search, category or segment changes.
+- Channel logos reuse the existing bounded, downsampled in-memory image cache.
+- Muted preview remains opt-in on phone and delayed on iPad.
+
+Series:
+- Series info requests prefer the API base discovered during provider authentication (in memory only).
+- Retry one time after a 404 with a short delay; other failures are not repeatedly retried.
+- If series info still cannot load, show Retry in the detail screen without requiring navigation away.
+- Playback streams and provider credentials are not added to any disk cache by this change.
+
+Verification performed on the supplied source: targeted static regressions and Swift parse;
+a standalone Swift typecheck of the one-time 404 catch; ZIP integrity.
+Not performed: Apple xcodebuild, Instruments profiling, iPhone/iPad playback or live provider testing.

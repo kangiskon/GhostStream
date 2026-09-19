@@ -1,0 +1,15 @@
+GhostStream runtime-stability patch
+
+Observed console symptoms:
+- SwiftUI: Publishing changes from within view updates is not allowed
+- SystemGestureGate timed out
+- debugger terminated by signal 9
+
+Patch:
+1. AVPlayer UIViewRepresentable no longer runs update/command/seek work synchronously inside updateUIView.
+2. MobileVLCKit UIViewRepresentable no longer runs update/command/seek work synchronously inside updateUIView.
+3. Landscape geometry request is delayed 150ms after presentation to avoid colliding with the presentation/update pass.
+4. Native-player failure state changes are deferred to the next main-queue turn.
+
+The EditMenuInteraction and keyboard snapshot messages are not treated as primary faults.
+The CFRunLoopCommonModes message may originate from an underlying framework/runtime and is retained for observation.

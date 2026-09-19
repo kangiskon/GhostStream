@@ -1,0 +1,20 @@
+NOTE: VLC frameworks are bundled in this self-contained Xcode 26.5 package. Any older download/manual-install instructions below are superseded.
+
+GHOSTSTREAM V2 — APPROVED CONCEPT BUILD
+======================================
+
+Implemented in this build:
+- Dark near-black + cyan/teal GhostStream visual system
+- Branded animated ghost intro
+- GhostStream app icon asset set for iPhone + App Store marketing
+- Premium Home dashboard with Live TV, Movies, Series, Saved Sources
+- User-source poster rails (no bundled third-party media artwork)
+- Cyan glowing tab bar and cards
+- Existing provider login, M3U, saved-source switching, Keychain storage
+- Hybrid player: native AVPlayer first; embedded compatibility fallback when needed
+- Full-screen playback, auto-hide chrome, pause/resume, VOD seeking, live DVR when supported
+- No visible third-party playback-engine branding
+
+IMPORTANT: MobileVLCKit.xcframework is intentionally not distributed in this ZIP.
+Place it at Frameworks/MobileVLCKit.xcframework if you want the compatibility fallback.
+Native AVPlayer playback works without it.
