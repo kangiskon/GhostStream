@@ -184,3 +184,21 @@ class AppleAuthRequest(StrictModel):
     platform: str = Field(min_length=1, max_length=32)
     os_version: str = Field(default='', max_length=64)
     public_key: str = Field(min_length=16)
+
+
+class DeviceUpdateRequest(StrictModel):
+    display_name: str = Field(min_length=1, max_length=160)
+
+
+class AccountSettingsUpsert(StrictModel):
+    autoplay_next: bool | None = None
+    aspect_fill: bool | None = None
+    playback_rate: float | None = Field(default=None, ge=0.5, le=2.0)
+
+
+class SyncPushRequest(StrictModel):
+    favorites: list[FavoriteUpsert] = Field(default_factory=list)
+    progress: list[PlaybackProgressUpsert] = Field(default_factory=list)
+    sources: list[SourceProfileUpsert] = Field(default_factory=list)
+    diagnostics: list[DiagnosticSnapshotUpsert] = Field(default_factory=list)
+    settings: AccountSettingsUpsert | None = None
