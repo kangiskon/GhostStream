@@ -27,6 +27,7 @@ from ..schemas import (
 )
 from ..security import decode_access_token, hash_password
 from ..services.apple_auth import AppleAuthError, verify_apple_identity_token
+from ..services.deletion_service import identifier_is_tombstoned
 from ..services.auth_service import (
     AuthContext,
     AuthError,
@@ -96,8 +97,15 @@ def current_session(
     session = db.get(Session, session_id)
     user = db.get(User, user_id)
     device = db.get(Device, device_id)
+    if session is None or user is None or device is None:
+        if (
+            identifier_is_tombstoned(db, 'session_id', str(session_id)) or
+            identifier_is_tombstoned(db, 'device_id', str(device_id)) or
+            identifier_is_tombstoned(db, 'user_id', str(user_id))
+        ):
+            raise HTTPException(status_code=410, detail={'code': 'account_deleted'})
+        raise HTTPException(status_code=401, detail={'code': 'invalid_session'})
     if (
-        session is None or user is None or device is None or
         session.user_id != user.id or session.device_id != device.id or
         session.revoked_at is not None or device.revoked_at is not None
     ):
@@ -207,6 +215,9 @@ def apple_login(payload: AppleAuthRequest, db: DBSession = Depends(get_session))
 
 @router.post('/refresh', response_model=TokenPair)
 def refresh(payload: RefreshRequest, db: DBSession = Depends(get_session)) -> TokenPair:
+    from ..security import sha256_text
+    if identifier_is_tombstoned(db, 'refresh_hash', sha256_text(payload.refresh_token)):
+        raise HTTPException(status_code=410, detail={'code': 'account_deleted'})
     try:
         return rotate_refresh_token(db, payload.refresh_token)
     except AuthError as error:
