@@ -14,6 +14,7 @@ from ..config import get_settings
 from ..db import get_session
 from ..models import Device, Session, User
 from ..schemas import (
+    AppleAuthRequest,
     ChangePasswordRequest,
     EmailTokenRequest,
     ForgotPasswordRequest,
@@ -25,6 +26,7 @@ from ..schemas import (
     TokenPair,
 )
 from ..security import decode_access_token, hash_password
+from ..services.apple_auth import AppleAuthError, verify_apple_identity_token
 from ..services.auth_service import (
     AuthContext,
     AuthError,
@@ -146,6 +148,46 @@ def verify_email(payload: EmailTokenRequest, db: DBSession = Depends(get_session
 def login(payload: LoginRequest, db: DBSession = Depends(get_session)) -> TokenPair:
     try:
         user = authenticate_password(db, str(payload.email), payload.password)
+        device = upsert_device(
+            db,
+            user_id=user.id,
+            device_id=payload.device_id,
+            display_name=payload.display_name,
+            platform=payload.platform,
+            os_version=payload.os_version,
+            public_key=payload.public_key,
+        )
+        pair = issue_session(db, user.id, device.id)
+        db.commit()
+        return pair
+    except AuthError as error:
+        db.rollback()
+        raise _auth_http_error(error)
+
+
+@router.post('/apple', response_model=TokenPair)
+def apple_login(payload: AppleAuthRequest, db: DBSession = Depends(get_session)) -> TokenPair:
+    try:
+        identity = verify_apple_identity_token(payload.identity_token)
+    except AppleAuthError as error:
+        raise HTTPException(status_code=401, detail={'code': 'invalid_apple_identity', 'message': str(error)})
+
+    user = db.scalar(select(User).where(User.apple_subject == identity.subject))
+    if user is None:
+        if not identity.email:
+            raise HTTPException(status_code=400, detail={'code': 'apple_email_required_on_first_sign_in'})
+        existing_email = db.scalar(select(User).where(User.email == identity.email))
+        if existing_email is not None:
+            raise HTTPException(status_code=409, detail={'code': 'account_link_required'})
+        user = User(
+            email=identity.email,
+            email_verified=True,
+            password_hash=None,
+            apple_subject=identity.subject,
+        )
+        db.add(user)
+        db.flush()
+    try:
         device = upsert_device(
             db,
             user_id=user.id,
