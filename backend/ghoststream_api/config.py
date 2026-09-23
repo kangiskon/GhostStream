@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file='.env', extra='ignore')
 
     database_url: str = 'sqlite:///./ghoststream.db'
-    jwt_secret: str = 'dev-only-change-me'
+    jwt_secret: str = 'dev-only-change-me-use-32-bytes-minimum'
     access_token_minutes: int = 15
     refresh_token_days: int = 30
     apple_allowed_audiences: str = ''
