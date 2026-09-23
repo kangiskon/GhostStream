@@ -266,12 +266,14 @@ Commit: `feat(brand): replace legacy assets with GhostStream 2.0 originals`.
 **Files:**
 - Create: `GhostStream/Account/AccountSettingsView.swift`
 - Create: `GhostStream/Account/DeleteAccountView.swift`
+- Create: `GhostStreamTV/Account/TVAccountSettingsView.swift`
 - Modify: `GhostStream/Account/GlobalDeletionCoordinator.swift`
 - Create: `regression_ghoststream2_delete_account.py`
 
 **Interfaces:**
-- Delete flow: warning -> re-authentication where required -> API delete -> local wipe -> signed-out welcome.
-- Include direct link to web deletion page as alternate access path.
+- Delete flow: warning -> re-authentication where required -> `POST /api/v1/deletion/account` -> local wipe -> signed-out welcome.
+- iPhone/iPad include a direct link to the web deletion page as an alternate access path.
+- Apple TV Settings exposes its own Delete Account action with an explicit confirmation; successful deletion returns TV to the signed-out pairing/auth screen and relies on the same canonical endpoint.
 
 - [ ] **Step 1: Regression checks wording and coverage**
 
@@ -283,7 +285,7 @@ Do not permit accidental one-tap deletion from settings list.
 
 - [ ] **Step 3: Stop active playback before wipe**
 
-Coordinate player dismissal then wipe SourceStore, Keychain, caches, EPG, activity, sync, pairings, account tokens.
+Coordinate player dismissal then wipe SourceStore, Keychain, caches, EPG, activity, sync, pairings, account tokens. Add the equivalent tvOS wipe path so deletion initiated from TV or received from another device cannot leave local source credentials behind.
 
 - [ ] **Step 4: Build/regress and commit**
 
@@ -299,7 +301,7 @@ Commit: `feat(account): add complete global deletion flow`.
 - Modify: `backend/DEPLOY.md`
 
 **Interfaces:**
-- Website authenticates user and calls the same `POST /api/v1/account/delete` endpoint.
+- Website authenticates user and calls the same `POST /api/v1/deletion/account` endpoint. Email/password accounts use the normal login endpoint; Apple-created accounts can authenticate through Sign in with Apple using the configured web Services ID included in `APPLE_ALLOWED_AUDIENCES`.
 
 - [ ] **Step 1: Contract test**
 
@@ -307,7 +309,7 @@ Assert website JS references canonical API endpoint and never claims that deleti
 
 - [ ] **Step 2: Build accessible deletion page**
 
-Show exactly what will be deleted; require authenticated confirmation; display completion/failure state.
+Show exactly what will be deleted; require authenticated confirmation; display completion/failure state. Provide email/password login and Sign in with Apple on the portal so Apple-only accounts are not forced to create a password.
 
 - [ ] **Step 3: Verify against local backend**
 
