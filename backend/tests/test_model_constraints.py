@@ -7,7 +7,7 @@ def make_payload(**extra):
         'source_id': '11111111-1111-1111-1111-111111111111',
         'display_name': 'Main',
         'kind': 'provider',
-        'fingerprint': 'fp-1',
+        'fingerprint': 'a' * 64,
         'capabilities': {'live': True, 'movies': True, 'series': True},
     }
     payload.update(extra)
@@ -35,3 +35,11 @@ def test_diagnostic_schema_rejects_non_finite_metrics():
             health_score=85,
             duration_seconds=float('nan'),
         )
+
+
+def test_source_profile_fingerprint_must_be_sha256_hex_not_a_raw_url():
+    from ghoststream_api.schemas import SourceProfileUpsert
+    with pytest.raises(ValidationError):
+        SourceProfileUpsert(**make_payload(fingerprint='https://provider.example/user/list.m3u'))
+    valid = SourceProfileUpsert(**make_payload(fingerprint='a' * 64))
+    assert valid.fingerprint == 'a' * 64
