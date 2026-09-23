@@ -169,7 +169,10 @@ class DeletionTombstone(Base):
 
 class SyncEvent(Base):
     __tablename__ = 'sync_events'
-    __table_args__ = (Index('ix_sync_events_user_cursor', 'user_id', 'cursor'),)
+    __table_args__ = (
+        Index('ix_sync_events_user_cursor', 'user_id', 'cursor'),
+        UniqueConstraint('user_id', 'cursor', name='uq_sync_event_user_cursor'),
+    )
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'), index=True)
