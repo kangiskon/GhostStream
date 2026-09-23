@@ -24,6 +24,8 @@ class User(Base):
     apple_subject: Mapped[str | None] = mapped_column(String(255), unique=True, index=True, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
     deletion_started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    sync_cursor: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    sync_settings: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict, nullable=False)
 
 
 class Device(Base):
