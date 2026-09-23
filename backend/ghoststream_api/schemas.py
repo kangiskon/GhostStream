@@ -67,6 +67,10 @@ class LoginRequest(StrictModel):
     email: EmailStr
     password: str = Field(min_length=1, max_length=256)
     device_id: UUID
+    display_name: str = Field(min_length=1, max_length=160)
+    platform: str = Field(min_length=1, max_length=32)
+    os_version: str = Field(default='', max_length=64)
+    public_key: str = Field(min_length=16)
 
     @field_validator('email')
     @classmethod
@@ -147,3 +151,26 @@ class SyncPush(StrictModel):
     sources: list[SourceProfileUpsert] = Field(default_factory=list)
     diagnostics: list[DiagnosticSnapshotUpsert] = Field(default_factory=list)
     settings: dict[str, Any] = Field(default_factory=dict)
+
+
+class EmailTokenRequest(StrictModel):
+    token: str = Field(min_length=32)
+
+
+class ForgotPasswordRequest(StrictModel):
+    email: EmailStr
+
+    @field_validator('email')
+    @classmethod
+    def normalize_forgot_email(cls, value: EmailStr) -> str:
+        return str(value).strip().lower()
+
+
+class ResetPasswordRequest(StrictModel):
+    token: str = Field(min_length=32)
+    new_password: str = Field(min_length=12, max_length=256)
+
+
+class ChangePasswordRequest(StrictModel):
+    current_password: str = Field(min_length=1, max_length=256)
+    new_password: str = Field(min_length=12, max_length=256)
