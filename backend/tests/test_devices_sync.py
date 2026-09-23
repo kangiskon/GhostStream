@@ -70,7 +70,7 @@ def test_sync_rejects_secret_source_fields():
             'source_id': str(uuid.uuid4()),
             'display_name': 'Main',
             'kind': 'provider',
-            'fingerprint': 'fp',
+            'fingerprint': 'a' * 64,
             'capabilities': {'live': True},
             'password': 'never-store-this',
         }]
@@ -144,7 +144,7 @@ def test_typed_source_diagnostic_and_activity_endpoints_share_sanitized_storage(
 
     source = client.put(f'/api/v1/sources/{source_id}', headers=headers, json={
         'source_id': str(source_id), 'display_name': 'Main', 'kind': 'provider',
-        'fingerprint': 'fp-main', 'capabilities': {'live': True, 'movies': True},
+        'fingerprint': 'b' * 64, 'capabilities': {'live': True, 'movies': True},
     })
     assert source.status_code == 200
     sources = client.get('/api/v1/sources', headers=headers)
@@ -171,3 +171,26 @@ def test_typed_source_diagnostic_and_activity_endpoints_share_sanitized_storage(
     activity = client.get('/api/v1/activity', headers=headers)
     assert activity.status_code == 200
     assert activity.json()[0]['content_id'] == 'movie-1'
+
+
+def test_sync_cursor_refreshes_stale_user_state_before_incrementing():
+    from ghoststream_api.models import SyncEvent
+    from ghoststream_api.services.sync_service import emit_event
+
+    _, user_id, _ = make_account('cursor@example.com')
+    db1 = SessionLocal()
+    db2 = SessionLocal()
+    try:
+        user1 = db1.get(User, user_id)
+        user2 = db2.get(User, user_id)
+        assert user1.sync_cursor == user2.sync_cursor == 0
+        assert emit_event(db2, user2, 'settings', 'account', 'upsert', {'playback_rate': 1.0}) == 1
+        db2.commit()
+        assert emit_event(db1, user1, 'settings', 'account', 'upsert', {'playback_rate': 1.25}) == 2
+        db1.commit()
+    finally:
+        db1.close()
+        db2.close()
+    with SessionLocal() as db:
+        cursors = list(db.scalars(select(SyncEvent.cursor).where(SyncEvent.user_id == user_id).order_by(SyncEvent.cursor)))
+        assert cursors == [1, 2]
