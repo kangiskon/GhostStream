@@ -102,7 +102,7 @@ git commit -m "feat(api): add GhostStream backend foundation"
 - Create: `backend/tests/test_model_constraints.py`
 
 **Interfaces:**
-- Produces SQLAlchemy models: `User`, `Device`, `Session`, `SourceProfile`, `Favorite`, `PlaybackProgress`, `DiagnosticSnapshot`, `PairingSession`, `DeletionTombstone`.
+- Produces SQLAlchemy models: `User`, `Device`, `Session`, `EmailActionToken`, `SourceProfile`, `Favorite`, `PlaybackProgress`, `DiagnosticSnapshot`, `PairingSession`, `DeletionTombstone`.
 
 - [ ] **Step 1: Write tests that pin secret-free source metadata**
 
@@ -151,7 +151,7 @@ Expected: PASS.
 
 Commit: `feat(api): add account device sync data model`.
 
-### Task 3: Email/password auth and rotating sessions
+### Task 3: Email/password auth, verification, recovery, and rotating sessions
 
 **Files:**
 - Create: `backend/ghoststream_api/security.py`
@@ -166,14 +166,19 @@ Commit: `feat(api): add account device sync data model`.
   - `verify_password(password: str, encoded: str) -> bool`
   - `issue_session(user_id: UUID, device_id: UUID) -> TokenPair`
   - `rotate_refresh_token(raw_token: str) -> TokenPair`
-  - routes `POST /api/v1/auth/register`, `/login`, `/refresh`, `/logout`.
+  - `issue_email_action(user_id: UUID, kind: str) -> str`
+  - routes `POST /api/v1/auth/register`, `/verify-email`, `/login`, `/refresh`, `/logout`, `/forgot-password`, `/reset-password`, `/change-password`.
 
 - [ ] **Step 1: Write auth tests**
 
 Tests cover:
-- registration hashes password
+- registration hashes password and creates a one-time email-verification token
+- email-verification token is stored only as a hash, expires, and cannot be reused
 - login succeeds with valid password
 - invalid password returns 401
+- forgot-password returns the same public response for existing and non-existing email addresses
+- reset token is single-use and invalidates existing sessions after a successful password reset
+- authenticated password change requires the current password and revokes other sessions
 - stored session contains only SHA-256 refresh hash
 - refresh rotates token and invalidates prior raw token
 - replay of rotated token revokes token family
@@ -185,11 +190,11 @@ Run: `cd backend && pytest tests/test_auth.py -q`.
 
 - [ ] **Step 3: Implement Argon2 password hashing and opaque refresh tokens**
 
-Generate refresh secret with `secrets.token_urlsafe(48)`; store `sha256(raw).hexdigest()`. JWT access claims include only `sub`, `device_id`, `session_id`, `iat`, `exp`.
+Generate refresh and email-action secrets with `secrets.token_urlsafe(48)`; store only `sha256(raw).hexdigest()`. `EmailActionToken` stores user id, action kind (`verify_email` or `reset_password`), expiry, used timestamp, and token hash. JWT access claims include only `sub`, `device_id`, `session_id`, `iat`, `exp`.
 
-- [ ] **Step 4: Implement routes and dependency**
+- [ ] **Step 4: Implement routes, email actions, and dependency**
 
-Create `current_session()` FastAPI dependency that verifies access token and checks session/device/account revocation state.
+Create `current_session()` FastAPI dependency that verifies access token and checks session/device/account revocation state. Registration calls an injectable `EmailSender` interface with the verification link; production implementation uses SMTP values from `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_FROM`, and `PUBLIC_WEB_BASE_URL`. Forgot-password always returns 202 with the same body. Reset/change password revoke existing sessions according to the tests.
 
 - [ ] **Step 5: Run tests and commit**
 
