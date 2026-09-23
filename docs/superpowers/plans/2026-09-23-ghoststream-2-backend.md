@@ -66,7 +66,7 @@ Expected: import or route failure because the backend package does not yet exist
 - [ ] **Step 3: Add minimal configuration and app**
 
 `config.py` exposes a cached Pydantic settings object with exact environment names:
-`DATABASE_URL`, `JWT_SECRET`, `ACCESS_TOKEN_MINUTES`, `REFRESH_TOKEN_DAYS`, `APPLE_BUNDLE_ID`, `APPLE_TEAM_ID`.
+`DATABASE_URL`, `JWT_SECRET`, `ACCESS_TOKEN_MINUTES`, `REFRESH_TOKEN_DAYS`, `APPLE_ALLOWED_AUDIENCES`, `APPLE_TEAM_ID`.
 
 `main.py`:
 ```python
@@ -229,7 +229,7 @@ Run: `cd backend && pytest tests/test_apple_auth.py -q`.
 
 - [ ] **Step 3: Implement Apple JWKS verifier**
 
-Fetch `https://appleid.apple.com/auth/keys` through `httpx`, cache keys by `kid`, verify issuer `https://appleid.apple.com`, audience equal to configured bundle/client id, signature, and expiry. Do not trust an email field without a verified token.
+Fetch `https://appleid.apple.com/auth/keys` through `httpx`, cache keys by `kid`, verify issuer `https://appleid.apple.com`, signature, expiry, and that the token audience is one of the comma-separated `APPLE_ALLOWED_AUDIENCES` values (native bundle id and, when configured, the web Services ID used by the deletion portal). Do not trust an email field without a verified token.
 
 - [ ] **Step 4: Implement account lookup/linking**
 
@@ -262,7 +262,13 @@ Commit: `feat(api): add Sign in with Apple`.
   - `DELETE /api/v1/devices/{id}`
   - `GET /api/v1/sync/pull?since=<cursor>`
   - `POST /api/v1/sync/push`
-- Sync types: favorites, playback progress, source metadata, sanitized diagnostics, account settings.
+  - `GET /api/v1/sources`
+  - `PUT /api/v1/sources/{source_id}`
+  - `GET /api/v1/diagnostics/{source_id}`
+  - `POST /api/v1/diagnostics/{source_id}`
+  - `GET /api/v1/activity`
+  - `PUT /api/v1/activity/progress/{content_id}`
+- Sync types: favorites, playback progress, source metadata, sanitized diagnostics, account settings. The source/diagnostic/activity routes are typed convenience endpoints over the same authorization and storage model; none may accept provider secrets.
 
 - [ ] **Step 1: Write authorization boundary tests**
 
@@ -295,7 +301,7 @@ Commit: `feat(api): add device registry and sanitized sync`.
 **Interfaces:**
 - Produces:
   - `delete_account(user_id: UUID) -> None`
-  - `POST /api/v1/account/delete`
+  - `POST /api/v1/deletion/account`
   - `GET /api/v1/account/state`.
 - Deleted/revoked device requests return HTTP 410 with body `{"code":"account_deleted"}` when matched by an unexpired tombstone.
 
