@@ -202,3 +202,7 @@ class SyncPushRequest(StrictModel):
     sources: list[SourceProfileUpsert] = Field(default_factory=list)
     diagnostics: list[DiagnosticSnapshotUpsert] = Field(default_factory=list)
     settings: AccountSettingsUpsert | None = None
+
+
+class DeleteAccountRequest(StrictModel):
+    confirmation: Literal['DELETE']
