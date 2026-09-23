@@ -174,3 +174,13 @@ class ResetPasswordRequest(StrictModel):
 class ChangePasswordRequest(StrictModel):
     current_password: str = Field(min_length=1, max_length=256)
     new_password: str = Field(min_length=12, max_length=256)
+
+
+class AppleAuthRequest(StrictModel):
+    identity_token: str = Field(min_length=16)
+    authorization_code: str | None = None
+    device_id: UUID
+    display_name: str = Field(min_length=1, max_length=160)
+    platform: str = Field(min_length=1, max_length=32)
+    os_version: str = Field(default='', max_length=64)
+    public_key: str = Field(min_length=16)
