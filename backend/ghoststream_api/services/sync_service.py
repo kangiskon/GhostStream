@@ -25,10 +25,18 @@ def _json_ready(value: Any) -> Any:
 
 
 def emit_event(db: DBSession, user: User, entity_type: str, entity_key: str, operation: str, payload: dict[str, Any]) -> int:
-    user.sync_cursor = int(user.sync_cursor or 0) + 1
+    locked_user = db.scalar(
+        select(User)
+        .where(User.id == user.id)
+        .with_for_update()
+        .execution_options(populate_existing=True)
+    )
+    if locked_user is None:
+        raise ValueError('user no longer exists')
+    locked_user.sync_cursor = int(locked_user.sync_cursor or 0) + 1
     event = SyncEvent(
-        user_id=user.id,
-        cursor=user.sync_cursor,
+        user_id=locked_user.id,
+        cursor=locked_user.sync_cursor,
         entity_type=entity_type,
         entity_key=entity_key,
         operation=operation,
@@ -36,7 +44,7 @@ def emit_event(db: DBSession, user: User, entity_type: str, entity_key: str, ope
     )
     db.add(event)
     db.flush()
-    return user.sync_cursor
+    return locked_user.sync_cursor
 
 
 def upsert_source(db: DBSession, user: User, item: SourceProfileUpsert) -> SourceProfile:
