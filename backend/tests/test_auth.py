@@ -113,3 +113,28 @@ def test_forgot_password_has_same_public_response_for_known_and_unknown_email(mo
 def test_default_jwt_secret_meets_hs256_minimum_length():
     from ghoststream_api.config import Settings
     assert len(Settings().jwt_secret.encode('utf-8')) >= 32
+
+
+def test_verification_token_is_single_use(monkeypatch):
+    sent = {}
+    monkeypatch.setattr('ghoststream_api.routes.auth.send_verification_email', lambda email, token: sent.update(token=token))
+    client = TestClient(app)
+    assert client.post('/api/v1/auth/register', json=register_payload()).status_code == 201
+    assert client.post('/api/v1/auth/verify-email', json={'token': sent['token']}).status_code == 200
+    assert client.post('/api/v1/auth/verify-email', json={'token': sent['token']}).status_code == 401
+
+
+def test_password_reset_revokes_old_sessions_and_changes_password(monkeypatch):
+    sent = {}
+    monkeypatch.setattr('ghoststream_api.routes.auth.send_verification_email', lambda email, token: sent.update(verify=token))
+    monkeypatch.setattr('ghoststream_api.routes.auth.send_reset_email', lambda email, token: sent.update(reset=token))
+    client = TestClient(app)
+    client.post('/api/v1/auth/register', json=register_payload())
+    verify_latest_email_token(sent['verify'])
+    login = client.post('/api/v1/auth/login', json=login_payload()).json()
+    assert client.post('/api/v1/auth/forgot-password', json={'email': 'owner@example.com'}).status_code == 202
+    reset = client.post('/api/v1/auth/reset-password', json={'token': sent['reset'], 'new_password': 'a-new-strong-password'})
+    assert reset.status_code == 200
+    assert client.get('/api/v1/devices', headers={'Authorization': f"Bearer {login['access_token']}"}).status_code == 401
+    assert client.post('/api/v1/auth/login', json=login_payload()).status_code == 401
+    assert client.post('/api/v1/auth/login', json=login_payload('a-new-strong-password')).status_code == 200
