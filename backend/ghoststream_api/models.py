@@ -81,7 +81,7 @@ class SourceProfile(Base):
     source_id: Mapped[uuid.UUID] = mapped_column(index=True)
     display_name: Mapped[str] = mapped_column(String(160))
     kind: Mapped[str] = mapped_column(String(32))
-    fingerprint: Mapped[str] = mapped_column(String(128))
+    fingerprint: Mapped[str] = mapped_column(String(64))
     capabilities: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
