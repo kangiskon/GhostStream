@@ -132,9 +132,8 @@ final class AccountStore: ObservableObject {
             try await loadAccountAndDevices()
             status = .signedIn
         } catch {
-            if case APIError.accountDeleted = error {
-                clearLocalSession()
-            } else if case APIError.unauthorized = error {
+            if let apiError = error as? APIError,
+               apiError == .accountDeleted || apiError == .unauthorized {
                 clearLocalSession()
             } else {
                 status = .error(error.localizedDescription)
@@ -239,7 +238,7 @@ final class AccountStore: ObservableObject {
     }
 
     private func handle(_ error: Error) {
-        if case APIError.accountDeleted = error {
+        if let apiError = error as? APIError, apiError == .accountDeleted {
             clearLocalSession()
             return
         }
