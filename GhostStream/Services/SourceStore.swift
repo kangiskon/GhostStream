@@ -65,6 +65,25 @@ final class SourceStore: ObservableObject {
         persist()
     }
 
+    /// Removes every locally saved source and its Keychain credential.
+    /// Used only by explicit global account deletion / wipe flows.
+    func wipeAllLocalData() {
+        let existingIDs = sources.map(\.id)
+        for id in existingIDs {
+            PasswordVault.delete(for: id)
+        }
+
+        sources = []
+        activeSourceID = nil
+        defaults.removeObject(forKey: sourcesKey)
+        defaults.removeObject(forKey: activeKey)
+
+        if let base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
+            let libraryRoot = base.appendingPathComponent("GhostStreamLibrary", isDirectory: true)
+            try? FileManager.default.removeItem(at: libraryRoot)
+        }
+    }
+
     /// Purge source-specific cached library metadata when a source is changed or deleted.
     /// This avoids showing an old account's titles after its credentials are edited.
     private func invalidateLibraryCache(for id: UUID) {
