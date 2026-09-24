@@ -26,6 +26,9 @@
 		C0A550000000000000000001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C0A550000000000000000002 /* PrivacyInfo.xcprivacy */; };
 		C8936E15B4D116F6B9334AC2 /* LibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B2079CA5DB27545B557C772 /* LibraryViewModel.swift */; };
 		CF0898F4592B568504A7E639 /* XtreamClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F1E589AE63711E1775858E /* XtreamClient.swift */; };
+		A21000000000000000000001 /* APIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21100000000000000000001 /* APIModels.swift */; };
+		A21000000000000000000002 /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21100000000000000000002 /* APIError.swift */; };
+		A21000000000000000000003 /* GhostStreamAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21100000000000000000003 /* GhostStreamAPIClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +53,9 @@
 		E4F1E589AE63711E1775858E /* XtreamClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XtreamClient.swift; sourceTree = "<group>"; };
 		EE9E66AA3FCE026147ED046E /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		FCEE4B0ED57BB0051A743DCC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A21100000000000000000001 /* APIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIModels.swift; sourceTree = "<group>"; };
+		A21100000000000000000002 /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
+		A21100000000000000000003 /* GhostStreamAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostStreamAPIClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +69,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A21200000000000000000001 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				A21100000000000000000001 /* APIModels.swift */,
+				A21100000000000000000002 /* APIError.swift */,
+				A21100000000000000000003 /* GhostStreamAPIClient.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+
 		01DF8015EE6D9F0C332DD0E1 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -92,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				5BCB2816522A6FCAB2F84E27 /* GhostStreamApp.swift */,
+				A21200000000000000000001 /* Account */,
 				01DF8015EE6D9F0C332DD0E1 /* Models */,
 				13E05BA0FC7CEA2BAFB34646 /* Parsers */,
 				5B946EAFAAE425F193DB993E /* Services */,
@@ -239,6 +257,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				18BE0E1D854B7320356873DA /* GhostStreamApp.swift in Sources */,
+				A21000000000000000000001 /* APIModels.swift in Sources */,
+				A21000000000000000000002 /* APIError.swift in Sources */,
+				A21000000000000000000003 /* GhostStreamAPIClient.swift in Sources */,
 				2B8C31B60A05F3407C35F959 /* Models.swift in Sources */,
 				7235D49FF354FDAEE68BBE3A /* M3UParser.swift in Sources */,
 				9522E524FCA2A4755A9C620A /* XMLTVParser.swift in Sources */,
