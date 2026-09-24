@@ -32,6 +32,9 @@
 		A21000000000000000000004 /* SessionVault.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21100000000000000000004 /* SessionVault.swift */; };
 		A21000000000000000000005 /* DeviceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21300000000000000000001 /* DeviceModels.swift */; };
 		A21000000000000000000006 /* DeviceIdentityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21300000000000000000002 /* DeviceIdentityService.swift */; };
+		A21000000000000000000007 /* AppleSignInCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21100000000000000000005 /* AppleSignInCoordinator.swift */; };
+		A21000000000000000000008 /* AccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21100000000000000000006 /* AccountStore.swift */; };
+		A21000000000000000000009 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21100000000000000000007 /* AuthView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +65,9 @@
 		A21100000000000000000004 /* SessionVault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionVault.swift; sourceTree = "<group>"; };
 		A21300000000000000000001 /* DeviceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceModels.swift; sourceTree = "<group>"; };
 		A21300000000000000000002 /* DeviceIdentityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceIdentityService.swift; sourceTree = "<group>"; };
+		A21100000000000000000005 /* AppleSignInCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInCoordinator.swift; sourceTree = "<group>"; };
+		A21100000000000000000006 /* AccountStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountStore.swift; sourceTree = "<group>"; };
+		A21100000000000000000007 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +98,9 @@
 				A21100000000000000000002 /* APIError.swift */,
 				A21100000000000000000003 /* GhostStreamAPIClient.swift */,
 				A21100000000000000000004 /* SessionVault.swift */,
+				A21100000000000000000005 /* AppleSignInCoordinator.swift */,
+				A21100000000000000000006 /* AccountStore.swift */,
+				A21100000000000000000007 /* AuthView.swift */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -281,6 +290,9 @@
 				A21000000000000000000004 /* SessionVault.swift in Sources */,
 				A21000000000000000000005 /* DeviceModels.swift in Sources */,
 				A21000000000000000000006 /* DeviceIdentityService.swift in Sources */,
+				A21000000000000000000007 /* AppleSignInCoordinator.swift in Sources */,
+				A21000000000000000000008 /* AccountStore.swift in Sources */,
+				A21000000000000000000009 /* AuthView.swift in Sources */,
 				2B8C31B60A05F3407C35F959 /* Models.swift in Sources */,
 				7235D49FF354FDAEE68BBE3A /* M3UParser.swift in Sources */,
 				9522E524FCA2A4755A9C620A /* XMLTVParser.swift in Sources */,
