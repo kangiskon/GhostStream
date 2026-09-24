@@ -29,6 +29,9 @@
 		A21000000000000000000001 /* APIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21100000000000000000001 /* APIModels.swift */; };
 		A21000000000000000000002 /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21100000000000000000002 /* APIError.swift */; };
 		A21000000000000000000003 /* GhostStreamAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21100000000000000000003 /* GhostStreamAPIClient.swift */; };
+		A21000000000000000000004 /* SessionVault.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21100000000000000000004 /* SessionVault.swift */; };
+		A21000000000000000000005 /* DeviceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21300000000000000000001 /* DeviceModels.swift */; };
+		A21000000000000000000006 /* DeviceIdentityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21300000000000000000002 /* DeviceIdentityService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +59,9 @@
 		A21100000000000000000001 /* APIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIModels.swift; sourceTree = "<group>"; };
 		A21100000000000000000002 /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
 		A21100000000000000000003 /* GhostStreamAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostStreamAPIClient.swift; sourceTree = "<group>"; };
+		A21100000000000000000004 /* SessionVault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionVault.swift; sourceTree = "<group>"; };
+		A21300000000000000000001 /* DeviceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceModels.swift; sourceTree = "<group>"; };
+		A21300000000000000000002 /* DeviceIdentityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceIdentityService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,12 +75,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A21400000000000000000001 /* Devices */ = {
+			isa = PBXGroup;
+			children = (
+				A21300000000000000000001 /* DeviceModels.swift */,
+				A21300000000000000000002 /* DeviceIdentityService.swift */,
+			);
+			path = Devices;
+			sourceTree = "<group>";
+		};
+
 		A21200000000000000000001 /* Account */ = {
 			isa = PBXGroup;
 			children = (
 				A21100000000000000000001 /* APIModels.swift */,
 				A21100000000000000000002 /* APIError.swift */,
 				A21100000000000000000003 /* GhostStreamAPIClient.swift */,
+				A21100000000000000000004 /* SessionVault.swift */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -110,6 +127,7 @@
 			children = (
 				5BCB2816522A6FCAB2F84E27 /* GhostStreamApp.swift */,
 				A21200000000000000000001 /* Account */,
+				A21400000000000000000001 /* Devices */,
 				01DF8015EE6D9F0C332DD0E1 /* Models */,
 				13E05BA0FC7CEA2BAFB34646 /* Parsers */,
 				5B946EAFAAE425F193DB993E /* Services */,
@@ -260,6 +278,9 @@
 				A21000000000000000000001 /* APIModels.swift in Sources */,
 				A21000000000000000000002 /* APIError.swift in Sources */,
 				A21000000000000000000003 /* GhostStreamAPIClient.swift in Sources */,
+				A21000000000000000000004 /* SessionVault.swift in Sources */,
+				A21000000000000000000005 /* DeviceModels.swift in Sources */,
+				A21000000000000000000006 /* DeviceIdentityService.swift in Sources */,
 				2B8C31B60A05F3407C35F959 /* Models.swift in Sources */,
 				7235D49FF354FDAEE68BBE3A /* M3UParser.swift in Sources */,
 				9522E524FCA2A4755A9C620A /* XMLTVParser.swift in Sources */,
