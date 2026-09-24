@@ -41,6 +41,8 @@
 		A21500000000000000000004 /* GhostDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21600000000000000000004 /* GhostDashboardView.swift */; };
 		A21500000000000000000005 /* GhostLibraryHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21600000000000000000005 /* GhostLibraryHubView.swift */; };
 		A21500000000000000000006 /* GhostMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21600000000000000000006 /* GhostMoreView.swift */; };
+		A21B00000000000000000001 /* CloudSourceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21C00000000000000000001 /* CloudSourceProfile.swift */; };
+		A21B00000000000000000002 /* SourceMigrationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21C00000000000000000002 /* SourceMigrationCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +82,8 @@
 		A21600000000000000000004 /* GhostDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostDashboardView.swift; sourceTree = "<group>"; };
 		A21600000000000000000005 /* GhostLibraryHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostLibraryHubView.swift; sourceTree = "<group>"; };
 		A21600000000000000000006 /* GhostMoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostMoreView.swift; sourceTree = "<group>"; };
+		A21C00000000000000000001 /* CloudSourceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSourceProfile.swift; sourceTree = "<group>"; };
+		A21C00000000000000000002 /* SourceMigrationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceMigrationCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +97,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A21D00000000000000000001 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				A21C00000000000000000001 /* CloudSourceProfile.swift */,
+				A21C00000000000000000002 /* SourceMigrationCoordinator.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+
 		A21700000000000000000001 /* Shell */ = {
 			isa = PBXGroup;
 			children = (
@@ -188,6 +202,7 @@
 				A21800000000000000000001 /* Dashboard */,
 				A21900000000000000000001 /* Library */,
 				A21A00000000000000000001 /* More */,
+				A21D00000000000000000001 /* Sources */,
 				01DF8015EE6D9F0C332DD0E1 /* Models */,
 				13E05BA0FC7CEA2BAFB34646 /* Parsers */,
 				5B946EAFAAE425F193DB993E /* Services */,
@@ -350,6 +365,8 @@
 				A21500000000000000000004 /* GhostDashboardView.swift in Sources */,
 				A21500000000000000000005 /* GhostLibraryHubView.swift in Sources */,
 				A21500000000000000000006 /* GhostMoreView.swift in Sources */,
+				A21B00000000000000000001 /* CloudSourceProfile.swift in Sources */,
+				A21B00000000000000000002 /* SourceMigrationCoordinator.swift in Sources */,
 				2B8C31B60A05F3407C35F959 /* Models.swift in Sources */,
 				7235D49FF354FDAEE68BBE3A /* M3UParser.swift in Sources */,
 				9522E524FCA2A4755A9C620A /* XMLTVParser.swift in Sources */,
