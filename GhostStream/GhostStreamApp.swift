@@ -42,6 +42,7 @@ struct GhostStreamApp: App {
                 .environmentObject(epg)
                 .environmentObject(account)
                 .task {
+                    _ = SourceMigrationCoordinator.shared.migrateIfNeeded()
                     await account.restoreSession()
                 }
                 .preferredColorScheme(.dark)
