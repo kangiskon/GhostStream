@@ -43,6 +43,10 @@
 		A21500000000000000000006 /* GhostMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21600000000000000000006 /* GhostMoreView.swift */; };
 		A21B00000000000000000001 /* CloudSourceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21C00000000000000000001 /* CloudSourceProfile.swift */; };
 		A21B00000000000000000002 /* SourceMigrationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21C00000000000000000002 /* SourceMigrationCoordinator.swift */; };
+		A21E00000000000000000001 /* PlaybackProgressStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21F00000000000000000001 /* PlaybackProgressStore.swift */; };
+		A21E00000000000000000002 /* ActivityStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21F00000000000000000002 /* ActivityStore.swift */; };
+		A21E00000000000000000003 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21F00000000000000000003 /* SyncEngine.swift */; };
+		A21E00000000000000000004 /* GlobalDeletionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21F00000000000000000004 /* GlobalDeletionCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +88,10 @@
 		A21600000000000000000006 /* GhostMoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostMoreView.swift; sourceTree = "<group>"; };
 		A21C00000000000000000001 /* CloudSourceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSourceProfile.swift; sourceTree = "<group>"; };
 		A21C00000000000000000002 /* SourceMigrationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceMigrationCoordinator.swift; sourceTree = "<group>"; };
+		A21F00000000000000000001 /* PlaybackProgressStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackProgressStore.swift; sourceTree = "<group>"; };
+		A21F00000000000000000002 /* ActivityStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityStore.swift; sourceTree = "<group>"; };
+		A21F00000000000000000003 /* SyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
+		A21F00000000000000000004 /* GlobalDeletionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalDeletionCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +105,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A22000000000000000000001 /* Activity */ = {
+			isa = PBXGroup;
+			children = (
+				A21F00000000000000000001 /* PlaybackProgressStore.swift */,
+				A21F00000000000000000002 /* ActivityStore.swift */,
+			);
+			path = Activity;
+			sourceTree = "<group>";
+		};
+		A22100000000000000000001 /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				A21F00000000000000000003 /* SyncEngine.swift */,
+			);
+			path = Sync;
+			sourceTree = "<group>";
+		};
+
 		A21D00000000000000000001 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -162,6 +188,7 @@
 				A21100000000000000000005 /* AppleSignInCoordinator.swift */,
 				A21100000000000000000006 /* AccountStore.swift */,
 				A21100000000000000000007 /* AuthView.swift */,
+				A21F00000000000000000004 /* GlobalDeletionCoordinator.swift */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -203,6 +230,8 @@
 				A21900000000000000000001 /* Library */,
 				A21A00000000000000000001 /* More */,
 				A21D00000000000000000001 /* Sources */,
+				A22000000000000000000001 /* Activity */,
+				A22100000000000000000001 /* Sync */,
 				01DF8015EE6D9F0C332DD0E1 /* Models */,
 				13E05BA0FC7CEA2BAFB34646 /* Parsers */,
 				5B946EAFAAE425F193DB993E /* Services */,
@@ -367,6 +396,10 @@
 				A21500000000000000000006 /* GhostMoreView.swift in Sources */,
 				A21B00000000000000000001 /* CloudSourceProfile.swift in Sources */,
 				A21B00000000000000000002 /* SourceMigrationCoordinator.swift in Sources */,
+				A21E00000000000000000001 /* PlaybackProgressStore.swift in Sources */,
+				A21E00000000000000000002 /* ActivityStore.swift in Sources */,
+				A21E00000000000000000003 /* SyncEngine.swift in Sources */,
+				A21E00000000000000000004 /* GlobalDeletionCoordinator.swift in Sources */,
 				2B8C31B60A05F3407C35F959 /* Models.swift in Sources */,
 				7235D49FF354FDAEE68BBE3A /* M3UParser.swift in Sources */,
 				9522E524FCA2A4755A9C620A /* XMLTVParser.swift in Sources */,
