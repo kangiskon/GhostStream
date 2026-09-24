@@ -28,94 +28,25 @@ enum GhostPrimarySection: Int, CaseIterable, Hashable {
 
 /// Unified GhostStream shell: touch-native on iPhone, TV-style top navigation on iPad.
 struct RootTabView: View {
+    @EnvironmentObject private var accountStore: AccountStore
     @EnvironmentObject private var store: SourceStore
     @EnvironmentObject private var library: LibraryViewModel
     @EnvironmentObject private var epg: EPGService
 
-    @State private var showLauncher = false
-    @State private var didInitialCheck = false
-    @State private var selectedSection: GhostPrimarySection = .home
-    @State private var showSettings = false
-
     var body: some View {
         Group {
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                iPadShell
+            if accountStore.isSignedIn || !store.sources.isEmpty {
+                GhostStreamShellView()
             } else {
-                phoneTabs
+                AuthView()
             }
         }
-        .accentColor(Theme.accent)
-        .task(id: store.activeSourceID) { await reloadIfNeeded() }
-        .onAppear {
-            guard !didInitialCheck else { return }
-            didInitialCheck = true
-            if store.activeSource == nil { showLauncher = true }
-        }
-        .fullScreenCover(isPresented: $showLauncher) {
-            LauncherView()
-                .environmentObject(store)
-                .environmentObject(library)
-                .environmentObject(epg)
-        }
-        .fullScreenCover(isPresented: $showSettings) {
-            SettingsView()
-                .environmentObject(store)
-                .environmentObject(library)
-                .environmentObject(epg)
+        .task(id: store.activeSourceID) {
+            await reloadActiveSource()
         }
     }
 
-    private var phoneTabs: some View {
-        TabView(selection: $selectedSection) {
-            GhostHomeView(selection: $selectedSection, onSettings: { showSettings = true })
-                .tabItem { Label("Home", systemImage: "house.fill") }
-                .tag(GhostPrimarySection.home)
-
-            LiveView()
-                .tabItem { Label("Live", systemImage: "tv.fill") }
-                .tag(GhostPrimarySection.live)
-
-            MoviesView()
-                .tabItem { Label("Movies", systemImage: "film.fill") }
-                .tag(GhostPrimarySection.movies)
-
-            SeriesView()
-                .tabItem { Label("Series", systemImage: "rectangle.stack.fill") }
-                .tag(GhostPrimarySection.series)
-
-            LauncherView()
-                .tabItem { Label("Sources", systemImage: "externaldrive.fill") }
-                .tag(GhostPrimarySection.sources)
-        }
-    }
-
-    private var iPadShell: some View {
-        VStack(spacing: 0) {
-            GhostTopNavigation(selection: $selectedSection, onSettings: { showSettings = true })
-            iPadDestination
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-        }
-        .background(Theme.background.ignoresSafeArea())
-    }
-
-    @ViewBuilder
-    private var iPadDestination: some View {
-        switch selectedSection {
-        case .home:
-            GhostHomeView(selection: $selectedSection, onSettings: { showSettings = true })
-        case .live:
-            LiveView()
-        case .movies:
-            MoviesView()
-        case .series:
-            SeriesView()
-        case .sources:
-            LauncherView()
-        }
-    }
-
-    private func reloadIfNeeded() async {
+    private func reloadActiveSource() async {
         guard let source = store.activeSource else {
             library.reset()
             epg.clear()
