@@ -35,6 +35,12 @@
 		A21000000000000000000007 /* AppleSignInCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21100000000000000000005 /* AppleSignInCoordinator.swift */; };
 		A21000000000000000000008 /* AccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21100000000000000000006 /* AccountStore.swift */; };
 		A21000000000000000000009 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21100000000000000000007 /* AuthView.swift */; };
+		A21500000000000000000001 /* GhostStreamNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21600000000000000000001 /* GhostStreamNavigation.swift */; };
+		A21500000000000000000002 /* GhostStreamShellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21600000000000000000002 /* GhostStreamShellView.swift */; };
+		A21500000000000000000003 /* DashboardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21600000000000000000003 /* DashboardModels.swift */; };
+		A21500000000000000000004 /* GhostDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21600000000000000000004 /* GhostDashboardView.swift */; };
+		A21500000000000000000005 /* GhostLibraryHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21600000000000000000005 /* GhostLibraryHubView.swift */; };
+		A21500000000000000000006 /* GhostMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21600000000000000000006 /* GhostMoreView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +74,12 @@
 		A21100000000000000000005 /* AppleSignInCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInCoordinator.swift; sourceTree = "<group>"; };
 		A21100000000000000000006 /* AccountStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountStore.swift; sourceTree = "<group>"; };
 		A21100000000000000000007 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		A21600000000000000000001 /* GhostStreamNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostStreamNavigation.swift; sourceTree = "<group>"; };
+		A21600000000000000000002 /* GhostStreamShellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostStreamShellView.swift; sourceTree = "<group>"; };
+		A21600000000000000000003 /* DashboardModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardModels.swift; sourceTree = "<group>"; };
+		A21600000000000000000004 /* GhostDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostDashboardView.swift; sourceTree = "<group>"; };
+		A21600000000000000000005 /* GhostLibraryHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostLibraryHubView.swift; sourceTree = "<group>"; };
+		A21600000000000000000006 /* GhostMoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostMoreView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +93,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A21700000000000000000001 /* Shell */ = {
+			isa = PBXGroup;
+			children = (
+				A21600000000000000000001 /* GhostStreamNavigation.swift */,
+				A21600000000000000000002 /* GhostStreamShellView.swift */,
+			);
+			path = Shell;
+			sourceTree = "<group>";
+		};
+		A21800000000000000000001 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				A21600000000000000000003 /* DashboardModels.swift */,
+				A21600000000000000000004 /* GhostDashboardView.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		A21900000000000000000001 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				A21600000000000000000005 /* GhostLibraryHubView.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		A21A00000000000000000001 /* More */ = {
+			isa = PBXGroup;
+			children = (
+				A21600000000000000000006 /* GhostMoreView.swift */,
+			);
+			path = More;
+			sourceTree = "<group>";
+		};
+
 		A21400000000000000000001 /* Devices */ = {
 			isa = PBXGroup;
 			children = (
@@ -137,6 +184,10 @@
 				5BCB2816522A6FCAB2F84E27 /* GhostStreamApp.swift */,
 				A21200000000000000000001 /* Account */,
 				A21400000000000000000001 /* Devices */,
+				A21700000000000000000001 /* Shell */,
+				A21800000000000000000001 /* Dashboard */,
+				A21900000000000000000001 /* Library */,
+				A21A00000000000000000001 /* More */,
 				01DF8015EE6D9F0C332DD0E1 /* Models */,
 				13E05BA0FC7CEA2BAFB34646 /* Parsers */,
 				5B946EAFAAE425F193DB993E /* Services */,
@@ -293,6 +344,12 @@
 				A21000000000000000000007 /* AppleSignInCoordinator.swift in Sources */,
 				A21000000000000000000008 /* AccountStore.swift in Sources */,
 				A21000000000000000000009 /* AuthView.swift in Sources */,
+				A21500000000000000000001 /* GhostStreamNavigation.swift in Sources */,
+				A21500000000000000000002 /* GhostStreamShellView.swift in Sources */,
+				A21500000000000000000003 /* DashboardModels.swift in Sources */,
+				A21500000000000000000004 /* GhostDashboardView.swift in Sources */,
+				A21500000000000000000005 /* GhostLibraryHubView.swift in Sources */,
+				A21500000000000000000006 /* GhostMoreView.swift in Sources */,
 				2B8C31B60A05F3407C35F959 /* Models.swift in Sources */,
 				7235D49FF354FDAEE68BBE3A /* M3UParser.swift in Sources */,
 				9522E524FCA2A4755A9C620A /* XMLTVParser.swift in Sources */,
