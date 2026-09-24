@@ -53,7 +53,23 @@ actor GhostStreamAPIClient {
         accessToken: String? = nil
     ) async throws -> Response {
         let cleanPath = path.hasPrefix("/") ? String(path.dropFirst()) : path
-        let url = baseURL.appendingPathComponent(cleanPath)
+        let parts = cleanPath.split(separator: "?", maxSplits: 1, omittingEmptySubsequences: false)
+        let pathPart = String(parts[0])
+        var url = baseURL
+        for segment in pathPart.split(separator: "/", omittingEmptySubsequences: true) {
+            url.appendPathComponent(String(segment))
+        }
+        if parts.count == 2 {
+            guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+                throw APIError.invalidResponse
+            }
+            components.percentEncodedQuery = String(parts[1])
+            guard let queryURL = components.url else {
+                throw APIError.invalidResponse
+            }
+            url = queryURL
+        }
+
         var request = URLRequest(url: url)
         request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Accept")
