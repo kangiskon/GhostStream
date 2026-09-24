@@ -176,6 +176,10 @@ final class AccountStore: ObservableObject {
         return accessToken
     }
 
+    func updateSyncState(_ state: SyncState) {
+        syncState = state
+    }
+
     func reloadDevices() async {
         guard accessToken != nil else { return }
         do {
