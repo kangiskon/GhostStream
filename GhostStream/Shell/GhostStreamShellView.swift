@@ -60,7 +60,7 @@ private struct DeviceCommandCenterOverview: View {
                                         .background(Theme.accent.opacity(0.12), in: RoundedRectangle(cornerRadius: 14))
                                     VStack(alignment: .leading, spacing: 4) {
                                         Text(device.displayName).font(.headline)
-                                        Text("(device.platform.uppercased()) • (device.trustState.capitalized)")
+                                        Text("\(device.platform.uppercased()) • \(device.trustState.capitalized)")
                                             .font(.caption)
                                             .foregroundStyle(Theme.muted)
                                     }
@@ -105,9 +105,9 @@ private struct IntelligenceCommandCenterOverview: View {
                                 .foregroundStyle(Theme.muted)
 
                             HStack {
-                                intelligenceMetric("LIVE", value: "(library.channels.count)")
-                                intelligenceMetric("MOVIES", value: "(library.movies.count)")
-                                intelligenceMetric("SERIES", value: "(library.series.count)")
+                                intelligenceMetric("LIVE", value: "\(library.channels.count)")
+                                intelligenceMetric("MOVIES", value: "\(library.movies.count)")
+                                intelligenceMetric("SERIES", value: "\(library.series.count)")
                             }
                         }
                         .padding(18)
