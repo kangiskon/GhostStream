@@ -167,6 +167,15 @@ final class AccountStore: ObservableObject {
         return pair
     }
 
+    func validAccessToken() async throws -> String {
+        if let accessToken {
+            return accessToken
+        }
+        _ = try await refreshSession()
+        guard let accessToken else { throw APIError.unauthorized }
+        return accessToken
+    }
+
     func reloadDevices() async {
         guard accessToken != nil else { return }
         do {
