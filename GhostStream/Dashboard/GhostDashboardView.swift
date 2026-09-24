@@ -104,10 +104,10 @@ struct GhostDashboardView: View {
             }
 
             HStack(spacing: 12) {
-                metric("(counts.live)", "LIVE")
-                metric("(counts.movies)", "MOVIES")
-                metric("(counts.series)", "SERIES")
-                metric("(accountStore.devices.filter { $0.revokedAt == nil }.count)", "DEVICES")
+                metric("\(counts.live)", "LIVE")
+                metric("\(counts.movies)", "MOVIES")
+                metric("\(counts.series)", "SERIES")
+                metric("\(accountStore.devices.filter { $0.revokedAt == nil }.count)", "DEVICES")
             }
         }
         .padding(20)
@@ -124,7 +124,7 @@ struct GhostDashboardView: View {
         if counts.total == 0 {
             return "Your source is connected. GhostStream will show library and health information as it becomes available."
         }
-        return "(counts.total) library items available across this device."
+        return "\(counts.total) library items available across this device."
     }
 
     private func metric(_ value: String, _ label: String) -> some View {
