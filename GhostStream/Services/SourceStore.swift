@@ -227,6 +227,11 @@ final class FavoriteStore: ObservableObject {
         defaults.set(Array(keys).sorted(), forKey: favoritesKey)
     }
 
+    func clearAll() {
+        keys.removeAll()
+        defaults.removeObject(forKey: favoritesKey)
+    }
+
     private func makeKey(sourceID: UUID, kind: FavoriteKind, id: String) -> String {
         "\(sourceID.uuidString)|\(kind.rawValue)|\(id)"
     }
