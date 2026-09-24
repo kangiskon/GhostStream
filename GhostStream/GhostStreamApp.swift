@@ -42,8 +42,14 @@ struct GhostStreamApp: App {
                 .environmentObject(epg)
                 .environmentObject(account)
                 .task {
+                    GlobalDeletionCoordinator.shared.configure(
+                        accountStore: account,
+                        library: library,
+                        epg: epg
+                    )
                     _ = SourceMigrationCoordinator.shared.migrateIfNeeded()
                     await account.restoreSession()
+                    SyncEngine.shared.start(accountStore: account)
                 }
                 .preferredColorScheme(.dark)
                 .tint(Theme.accent)
