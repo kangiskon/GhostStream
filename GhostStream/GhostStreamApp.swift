@@ -32,6 +32,7 @@ struct GhostStreamApp: App {
     @StateObject private var store = SourceStore.shared
     @StateObject private var library = LibraryViewModel()
     @StateObject private var epg = EPGService()
+    @StateObject private var account = AccountStore()
 
     var body: some Scene {
         WindowGroup {
@@ -39,6 +40,10 @@ struct GhostStreamApp: App {
                 .environmentObject(store)
                 .environmentObject(library)
                 .environmentObject(epg)
+                .environmentObject(account)
+                .task {
+                    await account.restoreSession()
+                }
                 .preferredColorScheme(.dark)
                 .tint(Theme.accent)
         }
