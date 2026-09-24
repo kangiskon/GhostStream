@@ -34,7 +34,11 @@ final class SourceMigrationCoordinator {
         store.sources.map(CloudSourceProfile.init(source:))
     }
 
-    func resetMigrationMarkerForTesting() {
+    func clearMigrationMarker() {
         defaults.removeObject(forKey: migrationKey)
+    }
+
+    func resetMigrationMarkerForTesting() {
+        clearMigrationMarker()
     }
 }
