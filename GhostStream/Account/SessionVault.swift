@@ -47,7 +47,7 @@ enum SessionVault {
             kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
         ]
         let status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
-        if status == errSecItemSuccess { return }
+        if status == errSecSuccess { return }
         guard status == errSecItemNotFound else { throw SessionVaultError.keychain(status) }
 
         var item = query
