@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import uuid
 from fastapi import APIRouter, Depends, HTTPException, Response
-from sqlalchemy import select, update
+from sqlalchemy import delete, or_, select, update
 from sqlalchemy.orm import Session as DBSession
 
 from ..db import get_session
-from ..models import Device, Session, utcnow
+from ..models import CredentialTransfer, Device, Session, utcnow
 from ..routes.auth import current_session
 from ..schemas import DeviceDTO, DeviceRegisterRequest, DeviceUpdateRequest
 from ..services.auth_service import AuthContext, AuthError, upsert_device
@@ -72,5 +72,9 @@ def revoke_device(device_id: uuid.UUID, context: AuthContext = Depends(current_s
     device.revoked_at = utcnow()
     device.trust_state = 'revoked'
     db.execute(update(Session).where(Session.device_id == device.id, Session.revoked_at.is_(None)).values(revoked_at=utcnow()))
+    db.execute(delete(CredentialTransfer).where(or_(
+        CredentialTransfer.sender_device_id == device.id,
+        CredentialTransfer.recipient_device_id == device.id,
+    )))
     db.commit()
     return Response(status_code=204)
