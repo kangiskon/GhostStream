@@ -47,6 +47,10 @@
 		A21E00000000000000000002 /* ActivityStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21F00000000000000000002 /* ActivityStore.swift */; };
 		A21E00000000000000000003 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21F00000000000000000003 /* SyncEngine.swift */; };
 		A21E00000000000000000004 /* GlobalDeletionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21F00000000000000000004 /* GlobalDeletionCoordinator.swift */; };
+		A23000000000000000000001 /* PairingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23100000000000000000001 /* PairingService.swift */; };
+		A23000000000000000000002 /* QRCodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23100000000000000000002 /* QRCodeScannerView.swift */; };
+		A23000000000000000000003 /* PairDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23100000000000000000003 /* PairDeviceView.swift */; };
+		A23000000000000000000004 /* DevicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23100000000000000000004 /* DevicesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,6 +96,10 @@
 		A21F00000000000000000002 /* ActivityStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityStore.swift; sourceTree = "<group>"; };
 		A21F00000000000000000003 /* SyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
 		A21F00000000000000000004 /* GlobalDeletionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalDeletionCoordinator.swift; sourceTree = "<group>"; };
+		A23100000000000000000001 /* PairingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingService.swift; sourceTree = "<group>"; };
+		A23100000000000000000002 /* QRCodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerView.swift; sourceTree = "<group>"; };
+		A23100000000000000000003 /* PairDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairDeviceView.swift; sourceTree = "<group>"; };
+		A23100000000000000000004 /* DevicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +181,10 @@
 			children = (
 				A21300000000000000000001 /* DeviceModels.swift */,
 				A21300000000000000000002 /* DeviceIdentityService.swift */,
+				A23100000000000000000001 /* PairingService.swift */,
+				A23100000000000000000002 /* QRCodeScannerView.swift */,
+				A23100000000000000000003 /* PairDeviceView.swift */,
+				A23100000000000000000004 /* DevicesView.swift */,
 			);
 			path = Devices;
 			sourceTree = "<group>";
@@ -400,6 +412,10 @@
 				A21E00000000000000000002 /* ActivityStore.swift in Sources */,
 				A21E00000000000000000003 /* SyncEngine.swift in Sources */,
 				A21E00000000000000000004 /* GlobalDeletionCoordinator.swift in Sources */,
+				A23000000000000000000001 /* PairingService.swift in Sources */,
+				A23000000000000000000002 /* QRCodeScannerView.swift in Sources */,
+				A23000000000000000000003 /* PairDeviceView.swift in Sources */,
+				A23000000000000000000004 /* DevicesView.swift in Sources */,
 				2B8C31B60A05F3407C35F959 /* Models.swift in Sources */,
 				7235D49FF354FDAEE68BBE3A /* M3UParser.swift in Sources */,
 				9522E524FCA2A4755A9C620A /* XMLTVParser.swift in Sources */,
