@@ -18,7 +18,7 @@ actor TVSyncService {
     }
 
     func pullProgress() async throws {
-        let token = try await TVPairingService().validAccessToken()
+        let token = try await TVPairingService.shared.validAccessToken()
         let values: [TVPlaybackProgressRecord] = try await request(
             path: "activity",
             method: "GET",
