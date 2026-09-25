@@ -28,6 +28,7 @@ final class AccountStore: ObservableObject {
     private let api: GhostStreamAPIClient
     private let identityService: DeviceIdentityService
     private var accessToken: String?
+    private var accessTokenExpiresAt: Date?
     private var refreshTask: Task<TokenPairDTO, Error>?
 
     init(
@@ -129,6 +130,7 @@ final class AccountStore: ObservableObject {
         do {
             let pair = try await refreshSession()
             accessToken = pair.accessToken
+            accessTokenExpiresAt = Date().addingTimeInterval(TimeInterval(max(30, pair.expiresIn - 30)))
             try await loadAccountAndDevices()
             status = .signedIn
         } catch {
@@ -164,11 +166,14 @@ final class AccountStore: ObservableObject {
         let pair = try await task.value
         try SessionVault.saveRefreshToken(pair.refreshToken, accountID: accountID)
         accessToken = pair.accessToken
+        accessTokenExpiresAt = Date().addingTimeInterval(TimeInterval(max(30, pair.expiresIn - 30)))
         return pair
     }
 
     func validAccessToken() async throws -> String {
-        if let accessToken {
+        if let accessToken,
+           let expiresAt = accessTokenExpiresAt,
+           expiresAt > Date() {
             return accessToken
         }
         _ = try await refreshSession()
@@ -231,6 +236,7 @@ final class AccountStore: ObservableObject {
 
     private func accept(pair: TokenPairDTO) async throws {
         accessToken = pair.accessToken
+        accessTokenExpiresAt = Date().addingTimeInterval(TimeInterval(max(30, pair.expiresIn - 30)))
         try await loadAccountAndDevices()
         guard let account else { throw APIError.invalidResponse }
         try SessionVault.saveRefreshToken(pair.refreshToken, accountID: account.id)
@@ -272,6 +278,7 @@ final class AccountStore: ObservableObject {
 
     private func clearLocalSession() {
         accessToken = nil
+        accessTokenExpiresAt = nil
         account = nil
         devices = []
         syncState = .idle
