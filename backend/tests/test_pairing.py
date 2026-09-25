@@ -160,3 +160,34 @@ def test_target_can_poll_state_only_with_its_pairing_token():
     )
     assert good.status_code == 200
     assert good.json()['state'] == 'pending'
+
+
+def test_approved_target_completes_pairing_once_and_receives_its_own_session():
+    client = TestClient(app)
+    access, _, _ = trusted_account()
+    target = new_target_payload()
+    created = client.post('/api/v1/pairing/sessions', json=target).json()
+    assert client.post('/api/v1/pairing/claim', headers=auth(access), json={
+        'pairing_id': created['pairing_id'],
+        'qr_token': created['qr_token'],
+    }).status_code == 200
+    assert client.post(
+        f"/api/v1/pairing/{created['pairing_id']}/approve",
+        headers=auth(access),
+        json={'approve': True},
+    ).status_code == 200
+
+    complete = client.post(
+        f"/api/v1/pairing/{created['pairing_id']}/complete",
+        json={'qr_token': created['qr_token']},
+    )
+    assert complete.status_code == 200
+    body = complete.json()
+    assert body['access_token']
+    assert body['refresh_token']
+
+    reused = client.post(
+        f"/api/v1/pairing/{created['pairing_id']}/complete",
+        json={'qr_token': created['qr_token']},
+    )
+    assert reused.status_code in (409, 410)
