@@ -201,6 +201,8 @@ final class SyncEngine: ObservableObject {
             sourceID: sourceID,
             contentKind: kind,
             contentID: contentID,
+            title: event.payload["title"]?.stringValue,
+            seriesID: event.payload["series_id"]?.intValue,
             positionSeconds: max(0, position),
             durationSeconds: max(0, duration),
             completed: event.payload["completed"]?.boolValue ?? false,
