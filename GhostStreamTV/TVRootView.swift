@@ -216,6 +216,14 @@ struct TVRootView: View {
                     try? await Task.sleep(nanoseconds: 12_000_000_000)
                 }
             }
+            .task {
+                while !Task.isCancelled {
+                    if TVSessionVault.readRefreshToken() != nil {
+                        try? await TVSyncService.shared.pullProgress()
+                    }
+                    try? await Task.sleep(nanoseconds: 20_000_000_000)
+                }
+            }
         }
     }
 }
