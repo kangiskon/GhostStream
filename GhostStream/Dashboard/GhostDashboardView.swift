@@ -230,11 +230,7 @@ struct GhostDashboardView: View {
 
     private var continueWatching: some View {
         dashboardSection("Continue Watching", icon: "play.circle.fill") {
-            EmptyDashboardState(
-                icon: "play.rectangle",
-                title: "Nothing in progress yet",
-                detail: "Movies and episodes you start will appear here and sync across your trusted devices."
-            )
+            ContinueWatchingView(limit: 5)
         }
     }
 
