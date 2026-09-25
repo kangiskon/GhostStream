@@ -69,33 +69,38 @@ struct DevicesView: View {
                             .overlay(RoundedRectangle(cornerRadius: 20).stroke(Theme.border, lineWidth: 1))
                         } else {
                             ForEach(accountStore.devices) { device in
-                                HStack(spacing: 14) {
-                                    Image(systemName: icon(for: device.platform))
-                                        .font(.title2)
-                                        .foregroundStyle(Theme.accentBright)
-                                        .frame(width: 50, height: 50)
-                                        .background(Theme.accent.opacity(0.12), in: RoundedRectangle(cornerRadius: 15))
+                                NavigationLink {
+                                    DeviceDetailView(device: device)
+                                } label: {
+                                    HStack(spacing: 14) {
+                                        Image(systemName: icon(for: device.platform))
+                                            .font(.title2)
+                                            .foregroundStyle(Theme.accentBright)
+                                            .frame(width: 50, height: 50)
+                                            .background(Theme.accent.opacity(0.12), in: RoundedRectangle(cornerRadius: 15))
 
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(device.displayName)
-                                            .font(.headline)
-                                        Text("(device.platform.uppercased()) • (device.osVersion)")
-                                            .font(.caption)
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text(device.displayName)
+                                                .font(.headline)
+                                                .foregroundStyle(.white)
+                                            Text("\(device.platform.uppercased()) • \(device.osVersion)")
+                                                .font(.caption)
+                                                .foregroundStyle(Theme.muted)
+                                            Text(device.revokedAt == nil ? "Trusted" : "Revoked")
+                                                .font(.caption2.weight(.bold))
+                                                .foregroundStyle(device.revokedAt == nil ? Color.green : Color.red)
+                                        }
+
+                                        Spacer()
+
+                                        Image(systemName: "chevron.right")
                                             .foregroundStyle(Theme.muted)
-                                        Text(device.revokedAt == nil ? device.trustState.capitalized : "Revoked")
-                                            .font(.caption2.weight(.bold))
-                                            .foregroundStyle(device.revokedAt == nil ? Color.green : Color.red)
                                     }
-
-                                    Spacer()
-
-                                    Circle()
-                                        .fill(device.revokedAt == nil ? Color.green : Color.red)
-                                        .frame(width: 9, height: 9)
+                                    .padding(16)
+                                    .background(Theme.card, in: RoundedRectangle(cornerRadius: 18))
+                                    .overlay(RoundedRectangle(cornerRadius: 18).stroke(Theme.border, lineWidth: 1))
                                 }
-                                .padding(16)
-                                .background(Theme.card, in: RoundedRectangle(cornerRadius: 18))
-                                .overlay(RoundedRectangle(cornerRadius: 18).stroke(Theme.border, lineWidth: 1))
+                                .buttonStyle(.plain)
                             }
                         }
                     }
