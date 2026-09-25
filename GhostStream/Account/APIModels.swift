@@ -158,3 +158,24 @@ struct PairingStateDTO: Codable, Equatable {
         case accountID = "account_id"
     }
 }
+
+
+struct CredentialTransferDTO: Codable, Equatable, Identifiable {
+    let id: UUID
+    let senderDeviceID: UUID
+    let recipientDeviceID: UUID
+    let ephemeralPublicKey: String
+    let nonce: String
+    let ciphertext: String
+    let createdAt: Date
+    let expiresAt: Date
+
+    enum CodingKeys: String, CodingKey {
+        case id, nonce, ciphertext
+        case senderDeviceID = "sender_device_id"
+        case recipientDeviceID = "recipient_device_id"
+        case ephemeralPublicKey = "ephemeral_public_key"
+        case createdAt = "created_at"
+        case expiresAt = "expires_at"
+    }
+}
