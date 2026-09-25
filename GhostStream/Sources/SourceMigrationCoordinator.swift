@@ -31,7 +31,7 @@ final class SourceMigrationCoordinator {
     }
 
     func cloudProfiles() -> [CloudSourceProfile] {
-        store.sources.map(CloudSourceProfile.init(source:))
+        store.sources.map { CloudSourceProfile(source: $0) }
     }
 
     func clearMigrationMarker() {
