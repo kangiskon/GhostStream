@@ -421,24 +421,29 @@ private struct TVTopNavLabel: View {
 }
 
 private struct TVGhostHomeDashboard: View {
+    @EnvironmentObject private var store: SourceStore
     @EnvironmentObject private var library: LibraryViewModel
+    @ObservedObject private var progress = TVPlaybackProgressStore.shared
     @Binding var section: TVMainSection
 
     private var featuredMovies: [VODStream] { Array(library.movies.prefix(6)) }
     private var featuredSeries: [Series] { Array(library.series.prefix(6)) }
-    private var continueMovies: [VODStream] { Array(library.movies.prefix(2)) }
-    private var continueSeries: [Series] { Array(library.series.prefix(2)) }
+    private var continueRecords: [TVPlaybackProgressRecord] {
+        progress.active(limit: 8).filter { record in
+            store.sources.contains(where: { $0.id == record.sourceID })
+        }
+    }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 TVGhostHomeHero(section: $section)
 
-                if !continueMovies.isEmpty || !continueSeries.isEmpty {
+                if !continueRecords.isEmpty {
                     Text("Continue Watching")
                         .font(.system(size: 28, weight: .bold))
                         .foregroundStyle(.white)
-                    TVHomeContinueShelf(movies: continueMovies, series: continueSeries)
+                    TVHomeContinueShelf(records: continueRecords)
                 }
 
                 TVHomeLiveRow(section: $section)
@@ -552,21 +557,16 @@ private struct TVGhostHomeHero: View {
 }
 
 private struct TVHomeContinueShelf: View {
-    let movies: [VODStream]
-    let series: [Series]
+    let records: [TVPlaybackProgressRecord]
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 22) {
-                ForEach(movies) { movie in
-                    NavigationLink { TVPlayerView(title: movie.name, urlString: movie.url ?? "") } label: {
-                        TVHomeContinueCard(title: movie.name, imageURL: movie.icon, detail: "MOVIE")
-                    }
-                    .buttonStyle(TVGhostFocusStyle())
-                }
-                ForEach(series) { show in
-                    NavigationLink { TVSeriesDetail(series: show) } label: {
-                        TVHomeContinueCard(title: show.name, imageURL: show.cover, detail: "SERIES")
+                ForEach(records) { record in
+                    NavigationLink {
+                        TVResumeContentDestination(record: record)
+                    } label: {
+                        TVHomeContinueCard(record: record)
                     }
                     .buttonStyle(TVGhostFocusStyle())
                 }
@@ -577,37 +577,175 @@ private struct TVHomeContinueShelf: View {
 }
 
 private struct TVHomeContinueCard: View {
-    let title: String
-    let imageURL: String?
-    let detail: String
+    let record: TVPlaybackProgressRecord
+
+    private var progressValue: Double {
+        guard record.durationSeconds > 0 else { return 0 }
+        return min(max(record.positionSeconds / record.durationSeconds, 0), 1)
+    }
 
     var body: some View {
         HStack(spacing: 0) {
-            TVRemoteImage(urlString: imageURL, systemImage: "play.rectangle.fill", contentMode: .fill, iconSize: 42)
-                .frame(width: 170, height: 98)
-                .clipped()
+            ZStack {
+                TVTheme.cardGradient
+                Image(systemName: record.contentKind == .episode ? "play.square.stack.fill" : "film.fill")
+                    .font(.system(size: 42, weight: .semibold))
+                    .foregroundStyle(TVTheme.accentBright)
+            }
+            .frame(width: 170, height: 98)
+            .clipped()
 
             VStack(alignment: .leading, spacing: 8) {
-                Text(TVDisplayFormatter.cleanTitle(title))
+                Text(TVDisplayFormatter.cleanTitle(record.title ?? (record.contentKind == .episode ? "Episode" : "Movie")))
                     .font(.headline.weight(.semibold))
                     .foregroundStyle(.white)
                     .lineLimit(1)
-                Text(detail)
-                    .font(.caption.weight(.bold))
-                    .tracking(1.5)
-                    .foregroundStyle(TVTheme.muted)
-                Capsule()
-                    .fill(TVTheme.accent)
-                    .frame(width: 115, height: 5)
+                HStack {
+                    Text(record.contentKind == .episode ? "EPISODE" : "MOVIE")
+                    Spacer()
+                    Text("\(Int(progressValue * 100))%")
+                        .monospacedDigit()
+                }
+                .font(.caption.weight(.bold))
+                .tracking(1.0)
+                .foregroundStyle(TVTheme.muted)
+
+                GeometryReader { geometry in
+                    ZStack(alignment: .leading) {
+                        Capsule().fill(Color.white.opacity(0.13))
+                        Capsule()
+                            .fill(TVTheme.accent)
+                            .frame(width: max(4, geometry.size.width * progressValue))
+                    }
+                }
+                .frame(height: 5)
             }
             .padding(.horizontal, 18)
-            .frame(width: 235, height: 98, alignment: .leading)
+            .frame(width: 260, height: 98, alignment: .leading)
         }
-        .frame(width: 405, height: 98)
+        .frame(width: 430, height: 98)
         .background(TVTheme.card, in: RoundedRectangle(cornerRadius: 16))
         .overlay(RoundedRectangle(cornerRadius: 16).stroke(TVTheme.border, lineWidth: 1))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .tvGhostFocus(cornerRadius: 16)
+    }
+}
+
+private struct TVResumeContentDestination: View {
+    @EnvironmentObject private var store: SourceStore
+    @EnvironmentObject private var library: LibraryViewModel
+
+    let record: TVPlaybackProgressRecord
+
+    @State private var movie: VODStream?
+    @State private var episode: Episode?
+    @State private var series: Series?
+    @State private var episodes: [Episode] = []
+    @State private var loading = true
+    @State private var errorMessage: String?
+
+    var body: some View {
+        Group {
+            if let movie {
+                TVPlayerView(
+                    title: movie.name,
+                    urlString: movie.url ?? "",
+                    contentID: String(movie.id)
+                )
+            } else if let episode, let series {
+                TVPlayerView(
+                    title: episode.title,
+                    urlString: episode.url ?? "",
+                    contentID: episode.id,
+                    seriesContext: TVSeriesPlaybackContext(
+                        seriesID: series.id,
+                        seriesTitle: series.name,
+                        plot: series.plot,
+                        episodes: episodes,
+                        initialEpisodeID: episode.id
+                    )
+                )
+            } else if loading {
+                ZStack {
+                    TVTheme.background.ignoresSafeArea()
+                    ProgressView("Preparing playback…")
+                        .tint(TVTheme.accent)
+                        .foregroundStyle(.white)
+                }
+            } else {
+                ZStack {
+                    TVTheme.background.ignoresSafeArea()
+                    TVPlaybackMessage(
+                        systemImage: "exclamationmark.triangle.fill",
+                        title: "Unable to resume",
+                        message: errorMessage ?? "This item is no longer available from the saved source."
+                    )
+                }
+            }
+        }
+        .task(id: record.id) {
+            await prepare()
+        }
+    }
+
+    @MainActor
+    private func prepare() async {
+        loading = true
+        errorMessage = nil
+
+        guard let source = store.sources.first(where: { $0.id == record.sourceID }) else {
+            errorMessage = "The source used for this item is not available on this Apple TV."
+            loading = false
+            return
+        }
+
+        if store.activeSourceID != source.id {
+            store.setActive(source)
+        }
+        if library.loadedSourceID != source.id {
+            await library.load(source: source)
+        }
+
+        switch record.contentKind {
+        case .vod:
+            guard let id = Int(record.contentID),
+                  let resolved = library.movies.first(where: { $0.id == id }) else {
+                errorMessage = "The movie could not be found in this source."
+                loading = false
+                return
+            }
+            movie = resolved
+
+        case .episode:
+            guard let seriesID = record.seriesID,
+                  let resolvedSeries = library.series.first(where: { $0.id == seriesID }),
+                  source.kind == .xtream,
+                  let server = source.serverURL,
+                  let username = source.username,
+                  let password = source.password else {
+                errorMessage = "The episode source is not available on this Apple TV."
+                loading = false
+                return
+            }
+            do {
+                let loaded = try await XtreamClient(
+                    serverURL: server,
+                    username: username,
+                    password: password
+                ).seriesInfo(seriesId: seriesID)
+                guard let resolvedEpisode = loaded.first(where: { $0.id == record.contentID }) else {
+                    errorMessage = "The episode is no longer available from this source."
+                    loading = false
+                    return
+                }
+                series = resolvedSeries
+                episodes = loaded
+                episode = resolvedEpisode
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+        }
+        loading = false
     }
 }
 
@@ -1297,7 +1435,7 @@ private struct TVMovieShelf: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 28) {
                 ForEach(items) { movie in
-                    NavigationLink { TVPlayerView(title: movie.name, urlString: movie.url ?? "") } label: {
+                    NavigationLink { TVPlayerView(title: movie.name, urlString: movie.url ?? "", contentID: String(movie.id)) } label: {
                         VStack(alignment: .leading, spacing: 10) {
                             TVPosterArtwork(urlString: movie.icon, system: "film")
                                 .frame(width: 190, height: 285)
@@ -1737,7 +1875,7 @@ private struct TVMovieGrid: View {
                         ) {
                             ForEach(visibleMovies) { movie in
                                 NavigationLink {
-                                    TVPlayerView(title: movie.name, urlString: movie.url ?? "")
+                                    TVPlayerView(title: movie.name, urlString: movie.url ?? "", contentID: String(movie.id))
                                 } label: {
                                     TVPosterCard(
                                         title: movie.name,
@@ -2009,7 +2147,7 @@ private struct TVSeriesDetail: View {
                         ) {
                             ForEach(filteredEpisodes) { episode in
                                 NavigationLink {
-                                    TVPlayerView(title: episode.title, urlString: episode.url ?? "", seriesContext: TVSeriesPlaybackContext(seriesTitle: series.name, plot: series.plot, episodes: episodes, initialEpisodeID: episode.id))
+                                    TVPlayerView(title: episode.title, urlString: episode.url ?? "", seriesContext: TVSeriesPlaybackContext(seriesID: series.id, seriesTitle: series.name, plot: series.plot, episodes: episodes, initialEpisodeID: episode.id))
                                 } label: {
                                     TVEpisodeCard(seriesCover: series.cover, episode: episode)
                                 }
@@ -2057,10 +2195,25 @@ private struct TVSeriesDetail: View {
 }
 
 private struct TVSeriesPlaybackContext {
+    let seriesID: Int?
     let seriesTitle: String
     let plot: String?
     let episodes: [Episode]
     let initialEpisodeID: String
+
+    init(
+        seriesID: Int? = nil,
+        seriesTitle: String,
+        plot: String?,
+        episodes: [Episode],
+        initialEpisodeID: String
+    ) {
+        self.seriesID = seriesID
+        self.seriesTitle = seriesTitle
+        self.plot = plot
+        self.episodes = episodes
+        self.initialEpisodeID = initialEpisodeID
+    }
 }
 
 private struct TVPlayerView: View {
