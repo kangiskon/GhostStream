@@ -9,8 +9,8 @@ struct PlaybackProgressRecord: Codable, Equatable, Identifiable {
     let sourceID: UUID
     let contentKind: PlaybackContentKind
     let contentID: String
-    var title: String?
-    var seriesID: Int?
+    var title: String? = nil
+    var seriesID: Int? = nil
     var positionSeconds: Double
     var durationSeconds: Double
     var completed: Bool
