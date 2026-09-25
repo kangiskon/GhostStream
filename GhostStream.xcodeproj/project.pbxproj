@@ -56,6 +56,13 @@
 		A23000000000000000000007 /* DeviceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23100000000000000000007 /* DeviceDetailView.swift */; };
 		A24000000000000000000001 /* DiagnosticModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24100000000000000000001 /* DiagnosticModels.swift */; };
 		A24000000000000000000002 /* HealthScoreCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24100000000000000000002 /* HealthScoreCalculator.swift */; };
+		A24000000000000000000003 /* SourceDiagnosticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24100000000000000000003 /* SourceDiagnosticsService.swift */; };
+		A24000000000000000000004 /* MediaProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24100000000000000000004 /* MediaProbe.swift */; };
+		A24000000000000000000005 /* DiagnosticSanitizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24100000000000000000005 /* DiagnosticSanitizer.swift */; };
+		A24000000000000000000006 /* DiagnosticHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24100000000000000000006 /* DiagnosticHistoryStore.swift */; };
+		A24000000000000000000007 /* SourceHealthDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24100000000000000000007 /* SourceHealthDetailView.swift */; };
+		A24000000000000000000008 /* DiagnosticHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24100000000000000000008 /* DiagnosticHistoryView.swift */; };
+		A24000000000000000000009 /* SourceIntelligenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24100000000000000000009 /* SourceIntelligenceView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -110,6 +117,13 @@
 		A23100000000000000000007 /* DeviceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailView.swift; sourceTree = "<group>"; };
 		A24100000000000000000001 /* DiagnosticModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticModels.swift; sourceTree = "<group>"; };
 		A24100000000000000000002 /* HealthScoreCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthScoreCalculator.swift; sourceTree = "<group>"; };
+		A24100000000000000000003 /* SourceDiagnosticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceDiagnosticsService.swift; sourceTree = "<group>"; };
+		A24100000000000000000004 /* MediaProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaProbe.swift; sourceTree = "<group>"; };
+		A24100000000000000000005 /* DiagnosticSanitizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticSanitizer.swift; sourceTree = "<group>"; };
+		A24100000000000000000006 /* DiagnosticHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticHistoryStore.swift; sourceTree = "<group>"; };
+		A24100000000000000000007 /* SourceHealthDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceHealthDetailView.swift; sourceTree = "<group>"; };
+		A24100000000000000000008 /* DiagnosticHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticHistoryView.swift; sourceTree = "<group>"; };
+		A24100000000000000000009 /* SourceIntelligenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceIntelligenceView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,6 +205,13 @@
 			children = (
 				A24100000000000000000001 /* DiagnosticModels.swift */,
 				A24100000000000000000002 /* HealthScoreCalculator.swift */,
+				A24100000000000000000003 /* SourceDiagnosticsService.swift */,
+				A24100000000000000000004 /* MediaProbe.swift */,
+				A24100000000000000000005 /* DiagnosticSanitizer.swift */,
+				A24100000000000000000006 /* DiagnosticHistoryStore.swift */,
+				A24100000000000000000007 /* SourceHealthDetailView.swift */,
+				A24100000000000000000008 /* DiagnosticHistoryView.swift */,
+				A24100000000000000000009 /* SourceIntelligenceView.swift */,
 			);
 			path = Intelligence;
 			sourceTree = "<group>";
@@ -445,6 +466,13 @@
 				A23000000000000000000007 /* DeviceDetailView.swift in Sources */,
 				A24000000000000000000001 /* DiagnosticModels.swift in Sources */,
 				A24000000000000000000002 /* HealthScoreCalculator.swift in Sources */,
+				A24000000000000000000003 /* SourceDiagnosticsService.swift in Sources */,
+				A24000000000000000000004 /* MediaProbe.swift in Sources */,
+				A24000000000000000000005 /* DiagnosticSanitizer.swift in Sources */,
+				A24000000000000000000006 /* DiagnosticHistoryStore.swift in Sources */,
+				A24000000000000000000007 /* SourceHealthDetailView.swift in Sources */,
+				A24000000000000000000008 /* DiagnosticHistoryView.swift in Sources */,
+				A24000000000000000000009 /* SourceIntelligenceView.swift in Sources */,
 				2B8C31B60A05F3407C35F959 /* Models.swift in Sources */,
 				7235D49FF354FDAEE68BBE3A /* M3UParser.swift in Sources */,
 				9522E524FCA2A4755A9C620A /* XMLTVParser.swift in Sources */,
