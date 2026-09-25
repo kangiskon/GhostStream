@@ -23,7 +23,7 @@ struct TVCredentialTransferDTO: Codable, Identifiable {
 struct TVCredentialTransferService {
     private let baseURL = URL(string: "https://ghoststreams.ink/api/v1")!
 
-    func receivePending(pairingService: TVPairingService = TVPairingService()) async throws -> Int {
+    func receivePending(pairingService: TVPairingService = .shared) async throws -> Int {
         let accessToken = try await pairingService.validAccessToken()
         let transfers: [TVCredentialTransferDTO] = try await request(
             path: "devices/me/transfers",
