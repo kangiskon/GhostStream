@@ -254,3 +254,7 @@ class PairingStateResponse(StrictModel):
     expires_at: datetime
     device_id: UUID
     account_id: UUID | None = None
+
+
+class PairingCompleteRequest(StrictModel):
+    qr_token: str = Field(min_length=32)
