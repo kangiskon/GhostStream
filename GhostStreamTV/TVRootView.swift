@@ -2706,6 +2706,10 @@ private struct TVPlaybackMessage: View {
 /// another URL or select the compatibility engine when AVPlayer rejects a codec.
 private struct TVNativePlayerController: UIViewControllerRepresentable {
     let url: URL
+    @Binding var currentTime: Double
+    @Binding var duration: Double
+    @Binding var requestedPosition: Double?
+    @Binding var playbackEndedToken: Int
     let onFailure: (String) -> Void
 
     func makeCoordinator() -> Coordinator {
@@ -2727,8 +2731,13 @@ private struct TVNativePlayerController: UIViewControllerRepresentable {
         context.coordinator.parent = self
         let coordinator = context.coordinator
         let nextURL = url
+        let seekPosition = requestedPosition
         DispatchQueue.main.async {
             coordinator.update(controller: controller, url: nextURL)
+            if let seekPosition {
+                coordinator.seek(to: seekPosition)
+                coordinator.parent.requestedPosition = nil
+            }
         }
     }
 
@@ -2742,6 +2751,8 @@ private struct TVNativePlayerController: UIViewControllerRepresentable {
         private var currentURL: URL?
         private var itemStatusObservation: NSKeyValueObservation?
         private var failedToEndObserver: NSObjectProtocol?
+        private var didEndObserver: NSObjectProtocol?
+        private var timeObserver: Any?
         private var readinessWorkItem: DispatchWorkItem?
         private var controlsActivationWorkItem: DispatchWorkItem?
         private var failureDelivered = false
@@ -2833,6 +2844,7 @@ private struct TVNativePlayerController: UIViewControllerRepresentable {
             player.replaceCurrentItem(with: item)
             player.automaticallyWaitsToMinimizeStalling = true
             player.actionAtItemEnd = .pause
+            installTimelineObserver()
             player.play()
 
             let work = DispatchWorkItem { [weak self, weak item] in
@@ -2868,6 +2880,53 @@ private struct TVNativePlayerController: UIViewControllerRepresentable {
                 let error = note.userInfo?[AVPlayerItemFailedToPlayToEndTimeErrorKey] as? Error
                 self?.failNative(error?.localizedDescription ?? "Playback failed.")
             }
+
+            didEndObserver = NotificationCenter.default.addObserver(
+                forName: .AVPlayerItemDidPlayToEndTime,
+                object: item,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self else { return }
+                self.publishTimeline()
+                self.parent.playbackEndedToken += 1
+            }
+        }
+
+        private func installTimelineObserver() {
+            if let timeObserver {
+                player.removeTimeObserver(timeObserver)
+                self.timeObserver = nil
+            }
+            timeObserver = player.addPeriodicTimeObserver(
+                forInterval: CMTime(seconds: 1, preferredTimescale: 600),
+                queue: .main
+            ) { [weak self] _ in
+                self?.publishTimeline()
+            }
+        }
+
+        private func publishTimeline() {
+            let current = CMTimeGetSeconds(player.currentTime())
+            let total = player.currentItem.map { CMTimeGetSeconds($0.duration) } ?? 0
+            if current.isFinite, current >= 0 {
+                parent.currentTime = current
+            }
+            if total.isFinite, total > 0 {
+                parent.duration = total
+            }
+        }
+
+        func seek(to fraction: Double) {
+            guard fraction.isFinite,
+                  let item = player.currentItem else { return }
+            let total = CMTimeGetSeconds(item.duration)
+            guard total.isFinite, total > 0 else { return }
+            let bounded = min(max(fraction, 0), 1)
+            player.seek(
+                to: CMTime(seconds: total * bounded, preferredTimescale: 600),
+                toleranceBefore: .zero,
+                toleranceAfter: .zero
+            )
         }
 
         private func failNative(_ message: String) {
@@ -2894,9 +2953,17 @@ private struct TVNativePlayerController: UIViewControllerRepresentable {
             readinessWorkItem?.cancel()
             readinessWorkItem = nil
             itemStatusObservation = nil
+            if let timeObserver {
+                player.removeTimeObserver(timeObserver)
+                self.timeObserver = nil
+            }
             if let failedToEndObserver {
                 NotificationCenter.default.removeObserver(failedToEndObserver)
                 self.failedToEndObserver = nil
+            }
+            if let didEndObserver {
+                NotificationCenter.default.removeObserver(didEndObserver)
+                self.didEndObserver = nil
             }
         }
     }
