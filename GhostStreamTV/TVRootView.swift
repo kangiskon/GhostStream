@@ -7,7 +7,7 @@ import UIKit
 import TVVLCKit
 #endif
 
-private enum TVTheme {
+enum TVTheme {
     // APK-inspired black + purple visual system.
     static let accent = Color(red: 124/255, green: 92/255, blue: 1.0)
     static let accentBright = Color(red: 160/255, green: 128/255, blue: 1.0)
@@ -31,7 +31,7 @@ private enum TVTheme {
 }
 
 /// Removes the default gray tvOS card chrome while preserving a tactile press state.
-private struct TVGhostFocusStyle: ButtonStyle {
+struct TVGhostFocusStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .scaleEffect(configuration.isPressed ? 0.985 : 1.0)
@@ -41,7 +41,7 @@ private struct TVGhostFocusStyle: ButtonStyle {
 }
 
 /// Cyan GhostStream focus treatment for Apple TV Remote navigation.
-private struct TVGhostFocusModifier: ViewModifier {
+struct TVGhostFocusModifier: ViewModifier {
     @Environment(\.isFocused) private var isFocused
     let cornerRadius: CGFloat
 
@@ -57,7 +57,7 @@ private struct TVGhostFocusModifier: ViewModifier {
     }
 }
 
-private struct TVPosterFocusModifier: ViewModifier {
+struct TVPosterFocusModifier: ViewModifier {
     @Environment(\.isFocused) private var isFocused
     let cornerRadius: CGFloat
 
@@ -73,7 +73,7 @@ private struct TVPosterFocusModifier: ViewModifier {
     }
 }
 
-private extension View {
+extension View {
     func tvGhostFocus(cornerRadius: CGFloat = 18) -> some View {
         modifier(TVGhostFocusModifier(cornerRadius: cornerRadius))
     }
@@ -150,7 +150,7 @@ private struct TVGhostInputField: ViewModifier {
     }
 }
 
-private extension View {
+extension View {
     func tvInputStyle() -> some View {
         modifier(TVGhostInputField())
     }
@@ -969,7 +969,7 @@ private struct TVSeriesShelf: View {
     }
 }
 
-private struct TVLiveListBrowser: View {
+struct TVLiveListBrowser: View {
     @EnvironmentObject private var store: SourceStore
     @EnvironmentObject private var library: LibraryViewModel
     @EnvironmentObject private var epg: EPGService
@@ -1826,7 +1826,7 @@ private struct TVLiveGrid: View {
     }
 }
 
-private struct TVMovieGrid: View {
+struct TVMovieGrid: View {
     @EnvironmentObject private var library: LibraryViewModel
     @State private var selectedMovieCategory: Category?
     @State private var visibleMovieLimit = TVMediaPaging.initialLimit
@@ -1904,7 +1904,7 @@ private struct TVMovieGrid: View {
     }
 }
 
-private struct TVSeriesGrid: View {
+struct TVSeriesGrid: View {
     @EnvironmentObject private var library: LibraryViewModel
     @State private var selectedSeriesCategory: Category?
     @State private var visibleSeriesLimit = TVMediaPaging.initialLimit
