@@ -63,6 +63,18 @@ final class SourceStore: ObservableObject {
         persist()
     }
 
+    /// Destructive account-deletion path. Erases every locally saved source,
+    /// all provider passwords in Keychain, and active-source metadata.
+    func wipeAllLocalData() {
+        for source in sources {
+            PasswordVault.delete(for: source.id)
+        }
+        sources.removeAll()
+        activeSourceID = nil
+        defaults.removeObject(forKey: sourcesKey)
+        defaults.removeObject(forKey: activeKey)
+    }
+
     // MARK: - Persistence
 
     private func load() {
