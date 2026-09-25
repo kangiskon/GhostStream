@@ -71,7 +71,7 @@ final class DeviceIdentityService {
             kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
         ]
         let status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
-        if status == errSecItemSuccess { return }
+        if status == errSecSuccess { return }
         guard status == errSecItemNotFound else { throw DeviceIdentityError.keychain(status) }
 
         var item = query
