@@ -3,10 +3,11 @@ from __future__ import annotations
 import uuid
 from datetime import timedelta
 
-from sqlalchemy import delete, select
+from sqlalchemy import delete, or_, select
 from sqlalchemy.orm import Session as DBSession
 
 from ..models import (
+    CredentialTransfer,
     DeletionTombstone,
     Device,
     DiagnosticSnapshot,
@@ -63,6 +64,13 @@ def delete_account(db: DBSession, user_id: uuid.UUID) -> None:
     for device in devices:
         _add_tombstone(db, 'device_id', str(device.id))
     db.flush()
+
+    device_ids = [device.id for device in devices]
+    if device_ids:
+        db.execute(delete(CredentialTransfer).where(or_(
+            CredentialTransfer.sender_device_id.in_(device_ids),
+            CredentialTransfer.recipient_device_id.in_(device_ids),
+        )))
 
     for model in (
         SyncEvent,
