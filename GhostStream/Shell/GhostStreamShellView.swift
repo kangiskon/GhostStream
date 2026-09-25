@@ -21,7 +21,7 @@ struct GhostStreamShellView: View {
                 .tabItem { Label("Devices", systemImage: GhostStreamSection.devices.icon) }
                 .tag(GhostStreamSection.devices)
 
-            IntelligenceCommandCenterOverview()
+            SourceIntelligenceView()
                 .tabItem { Label("Intelligence", systemImage: GhostStreamSection.intelligence.icon) }
                 .tag(GhostStreamSection.intelligence)
 
