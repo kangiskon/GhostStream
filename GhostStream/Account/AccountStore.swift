@@ -189,6 +189,35 @@ final class AccountStore: ObservableObject {
         }
     }
 
+    func renameDevice(_ device: DeviceDTO, displayName: String) async throws {
+        let trimmed = displayName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        let token = try await validAccessToken()
+        let updated: DeviceDTO = try await api.send(
+            path: "devices/\(device.id.uuidString)",
+            method: "PATCH",
+            body: DeviceRenameBody(displayName: trimmed),
+            accessToken: token
+        )
+        if let index = devices.firstIndex(where: { $0.id == updated.id }) {
+            devices[index] = updated
+        }
+    }
+
+    func revokeDevice(_ device: DeviceDTO) async throws {
+        let token = try await validAccessToken()
+        let _: EmptyResponse = try await api.send(
+            path: "devices/\(device.id.uuidString)",
+            method: "DELETE",
+            accessToken: token
+        )
+        devices.removeAll { $0.id == device.id }
+
+        if let identity = try? identityService.loadOrCreate(), identity.id == device.id {
+            clearLocalSession()
+        }
+    }
+
     func signOut() async {
         let refreshToken = SessionVault.readRefreshToken()
         if let refreshToken {
@@ -351,4 +380,10 @@ private struct AccountStateResponse: Codable {
         case accountID = "account_id"
         case emailVerified = "email_verified"
     }
+}
+
+
+private struct DeviceRenameBody: Codable {
+    let displayName: String
+    enum CodingKeys: String, CodingKey { case displayName = "display_name" }
 }
