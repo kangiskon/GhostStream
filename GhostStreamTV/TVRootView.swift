@@ -161,6 +161,7 @@ struct TVRootView: View {
     @EnvironmentObject private var library: LibraryViewModel
     @EnvironmentObject private var epg: EPGService
     @State private var showSources = false
+    @State private var showPairing = false
 
     var body: some View {
         NavigationStack {
@@ -168,14 +169,37 @@ struct TVRootView: View {
                 TVBackground()
                 if store.activeSource == nil {
                     TVSourceSetupView()
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Button {
+                                showPairing = true
+                            } label: {
+                                Label("Pair Device", systemImage: "qrcode")
+                                    .font(.headline)
+                                    .padding(.horizontal, 28)
+                                    .padding(.vertical, 16)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .tint(TVTheme.accent)
+                        }
+                    }
+                    .padding(54)
                 } else {
-                    TVMainShell(showSources: $showSources)
+                    TVMainShell(showSources: $showSources, showPairing: $showPairing)
                 }
             }
             .sheet(isPresented: $showSources) {
                 TVSourceSetupView(
                     onConnected: { showSources = false },
                     onClose: { showSources = false }
+                )
+            }
+            .sheet(isPresented: $showPairing) {
+                TVPairDeviceView(
+                    onPaired: { showPairing = false },
+                    onCancel: { showPairing = false }
                 )
             }
             .task(id: store.activeSourceID) {
@@ -248,6 +272,7 @@ private enum TVMainSection: String, CaseIterable, Identifiable {
 
 private enum TVTopFocus: Hashable {
     case section(TVMainSection)
+    case pairing
     case sources
 }
 
@@ -255,11 +280,12 @@ private struct TVMainShell: View {
     @EnvironmentObject private var store: SourceStore
     @EnvironmentObject private var library: LibraryViewModel
     @Binding var showSources: Bool
+    @Binding var showPairing: Bool
     @State private var section: TVMainSection = .home
 
     var body: some View {
         VStack(spacing: 0) {
-            TVTopNavigation(section: $section, showSources: $showSources)
+            TVTopNavigation(section: $section, showSources: $showSources, showPairing: $showPairing)
                 .padding(.horizontal, 64)
                 .padding(.top, 26)
                 .padding(.bottom, 18)
@@ -286,6 +312,7 @@ private struct TVMainShell: View {
 private struct TVTopNavigation: View {
     @Binding var section: TVMainSection
     @Binding var showSources: Bool
+    @Binding var showPairing: Bool
     @FocusState private var focusedItem: TVTopFocus?
 
     var body: some View {
@@ -311,6 +338,17 @@ private struct TVTopNavigation: View {
             }
 
             Spacer()
+
+            Button { showPairing = true } label: {
+                TVTopNavLabel(
+                    title: "Pair",
+                    systemImage: "qrcode",
+                    selected: false,
+                    focused: focusedItem == .pairing
+                )
+            }
+            .buttonStyle(TVGhostFocusStyle())
+            .focused($focusedItem, equals: .pairing)
 
             Button { showSources = true } label: {
                 TVTopNavLabel(
