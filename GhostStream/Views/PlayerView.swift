@@ -19,10 +19,25 @@ struct PlayerMediaTrack: Identifiable, Hashable {
 }
 
 struct SeriesPlaybackContext {
+    let seriesID: Int?
     let seriesTitle: String
     let plot: String?
     let episodes: [Episode]
     let initialEpisodeID: String
+
+    init(
+        seriesID: Int? = nil,
+        seriesTitle: String,
+        plot: String?,
+        episodes: [Episode],
+        initialEpisodeID: String
+    ) {
+        self.seriesID = seriesID
+        self.seriesTitle = seriesTitle
+        self.plot = plot
+        self.episodes = episodes
+        self.initialEpisodeID = initialEpisodeID
+    }
 }
 
 private enum VODResumeStore {
@@ -44,6 +59,7 @@ struct PlayerView: View {
     @EnvironmentObject private var epg: EPGService
     @EnvironmentObject private var store: SourceStore
     @ObservedObject private var favorites = FavoriteStore.shared
+    @ObservedObject private var playbackProgress = PlaybackProgressStore.shared
 
     let title: String
     let urlString: String
@@ -79,6 +95,7 @@ struct PlayerView: View {
     @State private var showEpisodeInfo = false
     @State private var didRestoreResume = false
     @State private var episodeSwitchInProgress = false
+    @State private var lastProgressPublishedAt = Date.distantPast
 
     private var currentSeriesEpisode: Episode? {
         guard let context = seriesContext else { return nil }
@@ -89,6 +106,8 @@ struct PlayerView: View {
     private var effectiveURLString: String { currentSeriesEpisode?.url ?? urlString }
     private var streamURL: URL? { URL(string: effectiveURLString) }
     private var resumeID: String { currentSeriesEpisode?.id ?? contentID ?? effectiveURLString }
+    private var progressContentID: String? { currentSeriesEpisode?.id ?? contentID }
+    private var progressContentKind: PlaybackContentKind { currentSeriesEpisode == nil ? .vod : .episode }
     private let liveAccent = Color(red: 124.0 / 255.0, green: 92.0 / 255.0, blue: 1.0)
 
     /// Xtream live streams are often exposed as both MPEG-TS and HLS. iOS
@@ -189,24 +208,32 @@ struct PlayerView: View {
             if kind == .live && playing {
                 hasPlaybackStarted = true
             }
+            if kind == .vod && !playing && duration > 0 {
+                publishProgress(force: true)
+            }
         }
         .onChange(of: currentTime) { value in
             guard kind == .vod else { return }
+            restoreProgressIfNeeded()
             VODResumeStore.save(value, duration: duration, for: resumeID)
-            if !didRestoreResume, duration > 30 {
-                didRestoreResume = true
-                let saved = VODResumeStore.position(for: resumeID)
-                if saved > 10, saved < duration - 20 { requestedPosition = saved / duration }
+
+            if Date().timeIntervalSince(lastProgressPublishedAt) >= 10 {
+                publishProgress(force: false)
             }
         }
         .onChange(of: playbackEndedToken) { _ in
             guard kind == .vod, !episodeSwitchInProgress else { return }
+            currentTime = max(currentTime, duration)
+            publishProgress(force: true, completedOverride: true)
             VODResumeStore.clear(resumeID)
             if autoPlayNext { playAdjacentEpisode(offset: 1) }
         }
         .onDisappear {
             controlsHideWorkItem?.cancel()
-            VODResumeStore.save(currentTime, duration: duration, for: resumeID)
+            if kind == .vod {
+                publishProgress(force: true)
+                VODResumeStore.save(currentTime, duration: duration, for: resumeID)
+            }
             setLandscapePlayback(false)
         }
     }
@@ -655,7 +682,13 @@ struct PlayerView: View {
     private func seekVODBy(seconds: Double) {
         guard duration > 0 else { return }; let target=min(max(currentTime+seconds,0),duration); currentTime=target; requestedPosition=target/duration
     }
-    private func restartVOD() { VODResumeStore.clear(resumeID); currentTime=0; requestedPosition=0 }
+    private func restartVOD() {
+        VODResumeStore.clear(resumeID)
+        currentTime = 0
+        requestedPosition = 0
+        didRestoreResume = true
+        publishProgress(force: true, completedOverride: false)
+    }
     private func orderedEpisodes() -> [Episode] { seriesContext?.episodes.sorted { ($0.season,$0.episodeNum) < ($1.season,$1.episodeNum) } ?? [] }
     private func hasAdjacentEpisode(_ offset: Int) -> Bool {
         let list=orderedEpisodes(); guard let id=currentSeriesEpisode?.id, let i=list.firstIndex(where:{$0.id==id}) else{return false}; return list.indices.contains(i+offset)
@@ -676,6 +709,7 @@ struct PlayerView: View {
         // This avoids re-targeting AVPlayer/VLC while decoder callbacks from the
         // previous episode are still in flight.
         let previousResumeID = resumeID
+        publishProgress(force: true)
         VODResumeStore.save(currentTime, duration: duration, for: previousResumeID)
         episodeSwitchInProgress = true
         didRestoreResume = false
@@ -690,8 +724,87 @@ struct PlayerView: View {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.20) {
             currentEpisodeID = episode.id
+            didRestoreResume = false
+            lastProgressPublishedAt = .distantPast
             episodeSwitchInProgress = false
             scheduleControlsHide()
+        }
+    }
+
+    private func restoreProgressIfNeeded() {
+        guard !didRestoreResume,
+              kind == .vod,
+              duration > 30,
+              let sourceID = store.activeSourceID,
+              let contentID = progressContentID else { return }
+
+        didRestoreResume = true
+
+        if let synced = playbackProgress.records.first(where: {
+            $0.sourceID == sourceID &&
+            $0.contentKind == progressContentKind &&
+            $0.contentID == contentID &&
+            !$0.completed
+        }), synced.positionSeconds > 10,
+           synced.durationSeconds > 0,
+           synced.positionSeconds < synced.durationSeconds * 0.95 {
+            requestedPosition = min(max(synced.positionSeconds / max(duration, synced.durationSeconds), 0), 0.94)
+            return
+        }
+
+        let legacy = VODResumeStore.position(for: resumeID)
+        if legacy > 10, legacy < duration * 0.95 {
+            requestedPosition = legacy / duration
+        }
+    }
+
+    private func publishProgress(
+        force: Bool,
+        completedOverride: Bool? = nil
+    ) {
+        guard kind == .vod,
+              let sourceID = store.activeSourceID,
+              let contentID = progressContentID,
+              duration.isFinite,
+              duration > 0,
+              currentTime.isFinite else { return }
+
+        if !force && Date().timeIntervalSince(lastProgressPublishedAt) < 10 {
+            return
+        }
+
+        let completionRatio = min(max(currentTime / duration, 0), 1)
+        let completed = completedOverride ?? (completionRatio >= 0.95)
+        let now = Date()
+
+        let record = playbackProgress.record(
+            sourceID: sourceID,
+            contentKind: progressContentKind,
+            contentID: contentID,
+            title: effectiveTitle,
+            seriesID: seriesContext?.seriesID,
+            positionSeconds: completed ? duration : currentTime,
+            durationSeconds: duration,
+            completed: completed,
+            updatedAt: now
+        )
+
+        ActivityStore.shared.record(
+            ActivityEntry(
+                sourceID: sourceID,
+                contentKind: progressContentKind.rawValue,
+                contentID: contentID,
+                title: effectiveTitle,
+                deviceName: UIDevice.current.name,
+                updatedAt: now
+            )
+        )
+
+        SyncEngine.shared.enqueueProgress(record)
+        lastProgressPublishedAt = now
+
+        Task {
+            await SyncEngine.shared.pushPending()
         }
     }
 
