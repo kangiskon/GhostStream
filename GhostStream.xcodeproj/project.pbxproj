@@ -63,6 +63,7 @@
 		A24000000000000000000007 /* SourceHealthDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24100000000000000000007 /* SourceHealthDetailView.swift */; };
 		A24000000000000000000008 /* DiagnosticHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24100000000000000000008 /* DiagnosticHistoryView.swift */; };
 		A24000000000000000000009 /* SourceIntelligenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24100000000000000000009 /* SourceIntelligenceView.swift */; };
+		A25000000000000000000001 /* ContinueWatchingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25100000000000000000001 /* ContinueWatchingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -124,6 +125,7 @@
 		A24100000000000000000007 /* SourceHealthDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceHealthDetailView.swift; sourceTree = "<group>"; };
 		A24100000000000000000008 /* DiagnosticHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticHistoryView.swift; sourceTree = "<group>"; };
 		A24100000000000000000009 /* SourceIntelligenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceIntelligenceView.swift; sourceTree = "<group>"; };
+		A25100000000000000000001 /* ContinueWatchingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinueWatchingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +144,7 @@
 			children = (
 				A21F00000000000000000001 /* PlaybackProgressStore.swift */,
 				A21F00000000000000000002 /* ActivityStore.swift */,
+				A25100000000000000000001 /* ContinueWatchingView.swift */,
 			);
 			path = Activity;
 			sourceTree = "<group>";
@@ -455,6 +458,7 @@
 				A21B00000000000000000002 /* SourceMigrationCoordinator.swift in Sources */,
 				A21E00000000000000000001 /* PlaybackProgressStore.swift in Sources */,
 				A21E00000000000000000002 /* ActivityStore.swift in Sources */,
+				A25000000000000000000001 /* ContinueWatchingView.swift in Sources */,
 				A21E00000000000000000003 /* SyncEngine.swift in Sources */,
 				A21E00000000000000000004 /* GlobalDeletionCoordinator.swift in Sources */,
 				A23000000000000000000001 /* PairingService.swift in Sources */,
