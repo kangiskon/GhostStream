@@ -54,6 +54,8 @@
 		A23000000000000000000005 /* CredentialEnvelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23100000000000000000005 /* CredentialEnvelope.swift */; };
 		A23000000000000000000006 /* CredentialTransferService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23100000000000000000006 /* CredentialTransferService.swift */; };
 		A23000000000000000000007 /* DeviceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23100000000000000000007 /* DeviceDetailView.swift */; };
+		A24000000000000000000001 /* DiagnosticModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24100000000000000000001 /* DiagnosticModels.swift */; };
+		A24000000000000000000002 /* HealthScoreCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24100000000000000000002 /* HealthScoreCalculator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -106,6 +108,8 @@
 		A23100000000000000000005 /* CredentialEnvelope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialEnvelope.swift; sourceTree = "<group>"; };
 		A23100000000000000000006 /* CredentialTransferService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTransferService.swift; sourceTree = "<group>"; };
 		A23100000000000000000007 /* DeviceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailView.swift; sourceTree = "<group>"; };
+		A24100000000000000000001 /* DiagnosticModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticModels.swift; sourceTree = "<group>"; };
+		A24100000000000000000002 /* HealthScoreCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthScoreCalculator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,6 +186,16 @@
 			sourceTree = "<group>";
 		};
 
+		A24200000000000000000001 /* Intelligence */ = {
+			isa = PBXGroup;
+			children = (
+				A24100000000000000000001 /* DiagnosticModels.swift */,
+				A24100000000000000000002 /* HealthScoreCalculator.swift */,
+			);
+			path = Intelligence;
+			sourceTree = "<group>";
+		};
+
 		A21400000000000000000001 /* Devices */ = {
 			isa = PBXGroup;
 			children = (
@@ -246,6 +260,7 @@
 				5BCB2816522A6FCAB2F84E27 /* GhostStreamApp.swift */,
 				A21200000000000000000001 /* Account */,
 				A21400000000000000000001 /* Devices */,
+				A24200000000000000000001 /* Intelligence */,
 				A21700000000000000000001 /* Shell */,
 				A21800000000000000000001 /* Dashboard */,
 				A21900000000000000000001 /* Library */,
@@ -428,6 +443,8 @@
 				A23000000000000000000005 /* CredentialEnvelope.swift in Sources */,
 				A23000000000000000000006 /* CredentialTransferService.swift in Sources */,
 				A23000000000000000000007 /* DeviceDetailView.swift in Sources */,
+				A24000000000000000000001 /* DiagnosticModels.swift in Sources */,
+				A24000000000000000000002 /* HealthScoreCalculator.swift in Sources */,
 				2B8C31B60A05F3407C35F959 /* Models.swift in Sources */,
 				7235D49FF354FDAEE68BBE3A /* M3UParser.swift in Sources */,
 				9522E524FCA2A4755A9C620A /* XMLTVParser.swift in Sources */,
