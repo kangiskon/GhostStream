@@ -162,7 +162,7 @@ struct PairDeviceView: View {
                 claimedDevice = nil
             }
         } message: {
-            Text("Trust (claimedDevice?.displayName ?? "this device") and allow it to join your GhostStream account?")
+            Text("Trust \(claimedDevice?.displayName ?? "this device") and allow it to join your GhostStream account?")
         }
     }
 
