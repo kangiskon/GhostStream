@@ -90,6 +90,7 @@ def list_activity(context: AuthContext = Depends(current_session), db: DBSession
     items = db.scalars(select(PlaybackProgress).where(PlaybackProgress.user_id == context.user.id).order_by(PlaybackProgress.updated_at.desc()).limit(200))
     return [{
         'source_id': str(item.source_id), 'content_kind': item.content_kind, 'content_id': item.content_id,
+        'title': item.title, 'series_id': item.series_id,
         'position_seconds': item.position_seconds, 'duration_seconds': item.duration_seconds,
         'completed': item.completed, 'last_device_id': str(item.last_device_id) if item.last_device_id else None,
         'updated_at': item.updated_at.isoformat(),
