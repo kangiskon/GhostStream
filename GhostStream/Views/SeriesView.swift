@@ -172,7 +172,7 @@ struct SeriesDetailView: View {
                                     Text("SEASON \(group.season)").font(.caption.bold()).tracking(1.2).foregroundStyle(Theme.accent)
                                     ForEach(group.episodes) { episode in
                                         NavigationLink {
-                                            PlayerView(title: episode.title, urlString: episode.url ?? "", kind: .vod, contentID: episode.id, seriesContext: SeriesPlaybackContext(seriesTitle: series.name, plot: series.plot, episodes: episodes, initialEpisodeID: episode.id))
+                                            PlayerView(title: episode.title, urlString: episode.url ?? "", kind: .vod, contentID: episode.id, seriesContext: SeriesPlaybackContext(seriesID: series.id, seriesTitle: series.name, plot: series.plot, episodes: episodes, initialEpisodeID: episode.id))
                                         } label: {
                                             HStack(spacing: 12) {
                                                 Text(String(format: "%02d", episode.episodeNum)).font(.caption.monospacedDigit()).foregroundStyle(Theme.accent)
