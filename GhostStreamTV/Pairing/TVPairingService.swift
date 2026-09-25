@@ -225,6 +225,7 @@ actor TVPairingService {
 
     private let baseURL: URL
     private var accessToken: String?
+    private var accessTokenExpiresAt: Date?
     private let encoder: JSONEncoder
     private let decoder: JSONDecoder
 
@@ -283,11 +284,16 @@ actor TVPairingService {
         )
         try TVSessionVault.saveRefreshToken(pair.refreshToken)
         accessToken = pair.accessToken
+        accessTokenExpiresAt = Date().addingTimeInterval(TimeInterval(max(30, pair.expiresIn - 30)))
         return pair
     }
 
     func validAccessToken() async throws -> String {
-        if let accessToken { return accessToken }
+        if let accessToken,
+           let expiresAt = accessTokenExpiresAt,
+           expiresAt > Date() {
+            return accessToken
+        }
         guard let refresh = TVSessionVault.readRefreshToken() else {
             throw TVPairingError.noRefreshToken
         }
@@ -298,11 +304,13 @@ actor TVPairingService {
         )
         try TVSessionVault.saveRefreshToken(pair.refreshToken)
         accessToken = pair.accessToken
+        accessTokenExpiresAt = Date().addingTimeInterval(TimeInterval(max(30, pair.expiresIn - 30)))
         return pair.accessToken
     }
 
     func clearSession() {
         accessToken = nil
+        accessTokenExpiresAt = nil
         TVSessionVault.clear()
     }
 
