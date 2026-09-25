@@ -53,6 +53,7 @@
 		A23000000000000000000004 /* DevicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23100000000000000000004 /* DevicesView.swift */; };
 		A23000000000000000000005 /* CredentialEnvelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23100000000000000000005 /* CredentialEnvelope.swift */; };
 		A23000000000000000000006 /* CredentialTransferService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23100000000000000000006 /* CredentialTransferService.swift */; };
+		A23000000000000000000007 /* DeviceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23100000000000000000007 /* DeviceDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +105,7 @@
 		A23100000000000000000004 /* DevicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesView.swift; sourceTree = "<group>"; };
 		A23100000000000000000005 /* CredentialEnvelope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialEnvelope.swift; sourceTree = "<group>"; };
 		A23100000000000000000006 /* CredentialTransferService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTransferService.swift; sourceTree = "<group>"; };
+		A23100000000000000000007 /* DeviceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,6 +193,7 @@
 				A23100000000000000000004 /* DevicesView.swift */,
 				A23100000000000000000005 /* CredentialEnvelope.swift */,
 				A23100000000000000000006 /* CredentialTransferService.swift */,
+				A23100000000000000000007 /* DeviceDetailView.swift */,
 			);
 			path = Devices;
 			sourceTree = "<group>";
@@ -424,6 +427,7 @@
 				A23000000000000000000004 /* DevicesView.swift in Sources */,
 				A23000000000000000000005 /* CredentialEnvelope.swift in Sources */,
 				A23000000000000000000006 /* CredentialTransferService.swift in Sources */,
+				A23000000000000000000007 /* DeviceDetailView.swift in Sources */,
 				2B8C31B60A05F3407C35F959 /* Models.swift in Sources */,
 				7235D49FF354FDAEE68BBE3A /* M3UParser.swift in Sources */,
 				9522E524FCA2A4755A9C620A /* XMLTVParser.swift in Sources */,
