@@ -131,6 +131,8 @@ class PlaybackProgressUpsert(StrictModel):
     source_id: UUID
     content_kind: Literal['vod', 'episode']
     content_id: str = Field(min_length=1, max_length=255)
+    title: str | None = Field(default=None, max_length=255)
+    series_id: int | None = Field(default=None, ge=0)
     position_seconds: float = Field(ge=0)
     duration_seconds: float = Field(ge=0)
     completed: bool = False
