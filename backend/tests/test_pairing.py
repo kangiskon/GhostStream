@@ -53,7 +53,9 @@ def test_pairing_session_returns_plain_code_but_persists_only_hashes():
     assert len(body['manual_code']) == 6
     assert body['manual_code'].isdigit()
     assert body['qr_payload'].startswith('https://ghoststreams.ink/pair?')
-    assert body['qr_token'] not in body['qr_payload']
+    assert body['qr_token'] in body['qr_payload']
+    assert 'password=' not in body['qr_payload']
+    assert 'username=' not in body['qr_payload']
 
     with SessionLocal() as db:
         session = db.get(PairingSession, uuid.UUID(body['pairing_id']))
