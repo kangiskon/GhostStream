@@ -194,3 +194,33 @@ def test_sync_cursor_refreshes_stale_user_state_before_incrementing():
     with SessionLocal() as db:
         cursors = list(db.scalars(select(SyncEvent.cursor).where(SyncEvent.user_id == user_id).order_by(SyncEvent.cursor)))
         assert cursors == [1, 2]
+
+
+def test_episode_progress_preserves_safe_title_and_series_identity():
+    token, _, _ = make_account('episode-progress@example.com')
+    client = TestClient(app)
+    source_id = uuid.uuid4()
+    now = datetime.now(timezone.utc).isoformat()
+
+    pushed = client.post('/api/v1/sync/push', headers=auth(token), json={
+        'progress': [{
+            'source_id': str(source_id),
+            'content_kind': 'episode',
+            'content_id': 'ep-42',
+            'title': 'Episode 4',
+            'series_id': 777,
+            'position_seconds': 120,
+            'duration_seconds': 1800,
+            'completed': False,
+            'updated_at': now,
+        }]
+    })
+    assert pushed.status_code == 200
+
+    pulled = client.get('/api/v1/sync/pull?since=0', headers=auth(token))
+    assert pulled.status_code == 200
+    progress = next(event for event in pulled.json()['events'] if event['entity_type'] == 'progress')
+    assert progress['payload']['title'] == 'Episode 4'
+    assert progress['payload']['series_id'] == 777
+    assert 'password' not in progress['payload']
+    assert 'server_url' not in progress['payload']
