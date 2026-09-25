@@ -51,6 +51,14 @@ struct GhostStreamApp: App {
                     await account.restoreSession()
                     SyncEngine.shared.start(accountStore: account)
                 }
+                .task(id: account.isSignedIn) {
+                    guard account.isSignedIn else { return }
+                    let inbox = CredentialTransferService()
+                    while !Task.isCancelled && account.isSignedIn {
+                        _ = try? await inbox.receivePending(accountStore: account)
+                        try? await Task.sleep(nanoseconds: 15_000_000_000)
+                    }
+                }
                 .preferredColorScheme(.dark)
                 .tint(Theme.accent)
         }
