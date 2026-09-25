@@ -159,6 +159,22 @@ class PairingSession(Base):
     consumed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
+class CredentialTransfer(Base):
+    __tablename__ = 'credential_transfers'
+    __table_args__ = (
+        Index('ix_credential_transfers_recipient_expiry', 'recipient_device_id', 'expires_at'),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    sender_device_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('devices.id', ondelete='CASCADE'), index=True)
+    recipient_device_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('devices.id', ondelete='CASCADE'), index=True)
+    ephemeral_public_key: Mapped[str] = mapped_column(Text)
+    nonce: Mapped[str] = mapped_column(String(128))
+    ciphertext: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+
+
 class DeletionTombstone(Base):
     __tablename__ = 'deletion_tombstones'
 
