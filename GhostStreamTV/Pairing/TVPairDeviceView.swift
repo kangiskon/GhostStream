@@ -13,7 +13,7 @@ struct TVPairDeviceView: View {
     @State private var isWorking = false
     @AppStorage("ghoststream.tv.paired") private var isPaired = false
 
-    private let service = TVPairingService()
+    private let service = TVPairingService.shared
 
     var body: some View {
         ZStack {
