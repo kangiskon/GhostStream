@@ -207,6 +207,15 @@ struct TVRootView: View {
                 if library.loadedSourceID != source.id { await library.load(source: source) }
                 if epg.programmes.isEmpty && !epg.isLoading { await epg.load(for: source) }
             }
+            .task {
+                let inbox = TVCredentialTransferService()
+                while !Task.isCancelled {
+                    if TVSessionVault.readRefreshToken() != nil {
+                        _ = try? await inbox.receivePending()
+                    }
+                    try? await Task.sleep(nanoseconds: 12_000_000_000)
+                }
+            }
         }
     }
 }
