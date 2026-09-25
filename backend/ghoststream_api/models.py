@@ -109,6 +109,8 @@ class PlaybackProgress(Base):
     source_id: Mapped[uuid.UUID] = mapped_column(index=True)
     content_kind: Mapped[str] = mapped_column(String(24))
     content_id: Mapped[str] = mapped_column(String(255))
+    title: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    series_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
     position_seconds: Mapped[float] = mapped_column(Float, default=0.0)
     duration_seconds: Mapped[float] = mapped_column(Float, default=0.0)
     completed: Mapped[bool] = mapped_column(Boolean, default=False)
