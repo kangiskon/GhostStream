@@ -2219,9 +2219,11 @@ private struct TVSeriesPlaybackContext {
 private struct TVPlayerView: View {
     @EnvironmentObject private var epg: EPGService
     @EnvironmentObject private var store: SourceStore
+    @ObservedObject private var playbackProgress = TVPlaybackProgressStore.shared
     let title: String
     let urlString: String
     var epgChannelId: String? = nil
+    var contentID: String? = nil
     var seriesContext: TVSeriesPlaybackContext? = nil
 
     @State private var currentEpisodeID: String?
@@ -2239,6 +2241,12 @@ private struct TVPlayerView: View {
     @State private var episodeSwitchInProgress = false
     @State private var chromeVisible = true
     @State private var chromeHideWorkItem: DispatchWorkItem?
+    @State private var currentTime: Double = 0
+    @State private var duration: Double = 0
+    @State private var requestedPosition: Double?
+    @State private var playbackEndedToken = 0
+    @State private var didRestoreProgress = false
+    @State private var lastProgressPublishedAt = Date.distantPast
 
     private var currentEpisode: Episode? {
         guard let context = seriesContext else { return nil }
@@ -2247,6 +2255,8 @@ private struct TVPlayerView: View {
     }
     private var effectiveTitle: String { currentEpisode?.title ?? title }
     private var effectiveURLString: String { currentEpisode?.url ?? urlString }
+    private var progressContentID: String? { currentEpisode?.id ?? contentID }
+    private var progressKind: TVPlaybackContentKind { currentEpisode == nil ? .vod : .episode }
     private var originalURL: URL? {
         guard !effectiveURLString.isEmpty else { return nil }
         return URL(string: effectiveURLString)
@@ -2317,9 +2327,22 @@ private struct TVPlayerView: View {
             if currentEpisodeID == nil { currentEpisodeID = seriesContext?.initialEpisodeID }
             revealPlayerChrome()
         }
+        .onChange(of: currentTime) { _ in
+            restoreProgressIfNeeded()
+            if Date().timeIntervalSince(lastProgressPublishedAt) >= 10 {
+                publishProgress(force: false)
+            }
+        }
+        .onChange(of: duration) { _ in
+            restoreProgressIfNeeded()
+        }
+        .onChange(of: playbackEndedToken) { _ in
+            publishProgress(force: true, completedOverride: true)
+        }
         .onDisappear {
             chromeHideWorkItem?.cancel()
             chromeHideWorkItem = nil
+            publishProgress(force: true)
         }
         .onMoveCommand(perform: { _ in
             revealPlayerChrome()
@@ -2358,6 +2381,9 @@ private struct TVPlayerView: View {
     private func tvSwitch(_ episode: Episode) {
         guard !episodeSwitchInProgress, episode.id != currentEpisode?.id else { return }
 
+        // Persist the old episode before removing its decoder surface.
+        publishProgress(force: true)
+
         // Fully remove the old AVKit/VLC surface before installing the next
         // episode. tvOS focus/video decoders can otherwise still be releasing
         // the previous surface when the new URL is assigned.
@@ -2376,8 +2402,69 @@ private struct TVPlayerView: View {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.20) {
             currentEpisodeID = episode.id
+            currentTime = 0
+            duration = 0
+            requestedPosition = nil
+            didRestoreProgress = false
+            lastProgressPublishedAt = .distantPast
             episodeSwitchInProgress = false
             revealPlayerChrome(delay: 8)
+        }
+    }
+
+    private func restoreProgressIfNeeded() {
+        guard !didRestoreProgress,
+              duration > 30,
+              let sourceID = store.activeSourceID,
+              let contentID = progressContentID else { return }
+
+        didRestoreProgress = true
+        guard let saved = playbackProgress.records.first(where: {
+            $0.sourceID == sourceID &&
+            $0.contentKind == progressKind &&
+            $0.contentID == contentID &&
+            !$0.completed
+        }), saved.positionSeconds > 10,
+           saved.durationSeconds > 0,
+           saved.positionSeconds < saved.durationSeconds * 0.95 else {
+            return
+        }
+
+        requestedPosition = min(max(saved.positionSeconds / max(duration, saved.durationSeconds), 0), 0.94)
+    }
+
+    private func publishProgress(
+        force: Bool,
+        completedOverride: Bool? = nil
+    ) {
+        guard let sourceID = store.activeSourceID,
+              let contentID = progressContentID,
+              duration.isFinite,
+              duration > 0,
+              currentTime.isFinite else { return }
+
+        if !force && Date().timeIntervalSince(lastProgressPublishedAt) < 10 {
+            return
+        }
+
+        let completionRatio = min(max(currentTime / duration, 0), 1)
+        let completed = completedOverride ?? (completionRatio >= 0.95)
+        let now = Date()
+        let record = playbackProgress.record(
+            sourceID: sourceID,
+            contentKind: progressKind,
+            contentID: contentID,
+            title: effectiveTitle,
+            seriesID: seriesContext?.seriesID,
+            positionSeconds: completed ? duration : currentTime,
+            durationSeconds: duration,
+            completed: completed,
+            updatedAt: now
+        )
+        lastProgressPublishedAt = now
+
+        Task {
+            try? await TVSyncService.shared.push(record)
         }
     }
 
@@ -2389,6 +2476,10 @@ private struct TVPlayerView: View {
                 TVCompatibilityPlayer(
                     url: originalURL,
                     isPlaying: $compatibilityPlaying,
+                    currentTime: $currentTime,
+                    duration: $duration,
+                    requestedPosition: $requestedPosition,
+                    playbackEndedToken: $playbackEndedToken,
                     playbackCommand: compatibilityCommand,
                     audioTracks: $tvAudioTracks, subtitleTracks: $tvSubtitleTracks,
                     selectedAudioTrack: tvSelectedAudio, selectedSubtitleTrack: tvSelectedSubtitle,
@@ -2505,7 +2596,13 @@ private struct TVPlayerView: View {
             )
         } else {
             let candidate = tryOriginalNativeURL ? originalURL : nativePreferredURL(from: originalURL)
-            TVNativePlayerController(url: candidate) { message in
+            TVNativePlayerController(
+                url: candidate,
+                currentTime: $currentTime,
+                duration: $duration,
+                requestedPosition: $requestedPosition,
+                playbackEndedToken: $playbackEndedToken
+            ) { message in
                 DispatchQueue.main.async {
                     playbackError = message
 
