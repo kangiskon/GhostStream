@@ -2978,6 +2978,10 @@ private struct TVMediaTrack: Identifiable, Hashable { let id: Int; let name: Str
 private struct TVCompatibilityPlayer: UIViewRepresentable {
     let url: URL
     @Binding var isPlaying: Bool
+    @Binding var currentTime: Double
+    @Binding var duration: Double
+    @Binding var requestedPosition: Double?
+    @Binding var playbackEndedToken: Int
     let playbackCommand: Int
     @Binding var audioTracks: [TVMediaTrack]
     @Binding var subtitleTracks: [TVMediaTrack]
@@ -2999,10 +3003,15 @@ private struct TVCompatibilityPlayer: UIViewRepresentable {
         let coordinator = context.coordinator
         let nextURL = url
         let command = playbackCommand
+        let seekPosition = requestedPosition
         DispatchQueue.main.async {
             coordinator.update(url: nextURL, drawable: uiView)
             coordinator.handlePlaybackCommand(command)
             coordinator.handleTrackCommand(self.trackCommand)
+            if let seekPosition {
+                coordinator.seek(to: seekPosition)
+                coordinator.parent.requestedPosition = nil
+            }
         }
     }
 
@@ -3071,6 +3080,18 @@ private struct TVCompatibilityPlayer: UIViewRepresentable {
             guard !isStopped else { return }
             publishTracks()
             publishState()
+            publishTimeline()
+            if mediaPlayer.state == .ended {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self, !self.isStopped else { return }
+                    self.parent.playbackEndedToken += 1
+                }
+            }
+        }
+
+        func mediaPlayerTimeChanged(_ aNotification: Notification) {
+            guard !isStopped else { return }
+            publishTimeline()
         }
 
         func handleTrackCommand(_ command: Int) {
@@ -3078,6 +3099,28 @@ private struct TVCompatibilityPlayer: UIViewRepresentable {
             if let id=parent.selectedAudioTrack { mediaPlayer.currentAudioTrackIndex=Int32(id) }
             if let id=parent.selectedSubtitleTrack { mediaPlayer.currentVideoSubTitleIndex=Int32(id) }
         }
+        func seek(to fraction: Double) {
+            guard !isStopped, fraction.isFinite else { return }
+            mediaPlayer.position = Float(min(max(fraction, 0), 1))
+        }
+
+        private func publishTimeline() {
+            guard !isStopped else { return }
+            let currentMs = mediaPlayer.time.intValue
+            let durationMs = mediaPlayer.media?.length.intValue ?? 0
+            let current = Double(currentMs) / 1000.0
+            let total = Double(durationMs) / 1000.0
+            DispatchQueue.main.async { [weak self] in
+                guard let self, !self.isStopped else { return }
+                if current.isFinite, current >= 0 {
+                    self.parent.currentTime = current
+                }
+                if total.isFinite, total > 0 {
+                    self.parent.duration = total
+                }
+            }
+        }
+
         private func publishTracks() {
             guard !isStopped else { return }
             let an=mediaPlayer.audioTrackNames as? [String] ?? []; let ai=mediaPlayer.audioTrackIndexes as? [NSNumber] ?? []
