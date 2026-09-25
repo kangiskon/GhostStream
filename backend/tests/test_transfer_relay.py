@@ -148,3 +148,24 @@ def test_expired_transfer_is_not_returned():
     inbox = client.get('/api/v1/devices/me/transfers', headers=auth(recipient_pair.access_token))
     assert inbox.status_code == 200
     assert inbox.json() == []
+
+
+def test_revoking_device_purges_queued_transfers():
+    sender, recipient, sender_pair, _ = make_two_devices()
+    client = TestClient(app)
+    created = client.post(
+        f'/api/v1/devices/{recipient.id}/transfers',
+        headers=auth(sender_pair.access_token),
+        json=envelope(),
+    )
+    assert created.status_code == 201
+
+    revoked = client.delete(
+        f'/api/v1/devices/{recipient.id}',
+        headers=auth(sender_pair.access_token),
+    )
+    assert revoked.status_code == 204
+
+    from ghoststream_api.models import CredentialTransfer
+    with SessionLocal() as db:
+        assert db.scalar(select(CredentialTransfer)) is None
