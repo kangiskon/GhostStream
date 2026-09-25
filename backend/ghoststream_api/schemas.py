@@ -198,3 +198,59 @@ class SyncPushRequest(StrictModel):
 
 class DeleteAccountRequest(StrictModel):
     confirmation: Literal['DELETE']
+
+
+class PairingSessionCreateRequest(StrictModel):
+    device_id: UUID
+    display_name: str = Field(min_length=1, max_length=160)
+    platform: Literal['ios', 'ipados', 'tvos']
+    os_version: str = Field(default='', max_length=64)
+    public_key: str = Field(min_length=16)
+
+
+class PairingClaimRequest(StrictModel):
+    manual_code: str | None = Field(default=None, pattern=r'^\d{6}$')
+    pairing_id: UUID | None = None
+    qr_token: str | None = Field(default=None, min_length=32)
+
+    @model_validator(mode='after')
+    def one_claim_method(self):
+        manual = self.manual_code is not None
+        qr = self.pairing_id is not None or self.qr_token is not None
+        if manual and qr:
+            raise ValueError('use either manual code or QR token')
+        if manual:
+            return self
+        if self.pairing_id is None or self.qr_token is None:
+            raise ValueError('pairing_id and qr_token are required for QR claim')
+        return self
+
+
+class PairingApproveRequest(StrictModel):
+    approve: bool
+
+
+class PairingSessionResponse(StrictModel):
+    pairing_id: UUID
+    manual_code: str
+    qr_token: str
+    qr_payload: str
+    expires_at: datetime
+
+
+class PairingClaimResponse(StrictModel):
+    pairing_id: UUID
+    device_id: UUID
+    display_name: str
+    platform: str
+    os_version: str
+    public_key: str
+    expires_at: datetime
+
+
+class PairingStateResponse(StrictModel):
+    pairing_id: UUID
+    state: Literal['pending', 'claimed', 'approved', 'rejected', 'expired']
+    expires_at: datetime
+    device_id: UUID
+    account_id: UUID | None = None
