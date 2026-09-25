@@ -258,3 +258,20 @@ class PairingStateResponse(StrictModel):
 
 class PairingCompleteRequest(StrictModel):
     qr_token: str = Field(min_length=32)
+
+
+class CredentialTransferCreateRequest(StrictModel):
+    ephemeral_public_key: str = Field(min_length=16, max_length=512)
+    nonce: str = Field(min_length=8, max_length=128)
+    ciphertext: str = Field(min_length=16, max_length=262144)
+
+
+class CredentialTransferDTO(StrictModel):
+    id: UUID
+    sender_device_id: UUID
+    recipient_device_id: UUID
+    ephemeral_public_key: str
+    nonce: str
+    ciphertext: str
+    created_at: datetime
+    expires_at: datetime
