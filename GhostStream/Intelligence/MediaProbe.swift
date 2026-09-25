@@ -113,8 +113,8 @@ enum MediaProbe {
         case kCMVideoCodecType_H264: return "H.264"
         case kCMVideoCodecType_HEVC: return "HEVC"
         case kCMVideoCodecType_JPEG: return "JPEG"
-        case kCMAudioCodecType_AAC_LC: return "AAC"
-        case kCMAudioCodecType_AAC_HE: return "HE-AAC"
+        case FourCharCode(0x6D703461): return "AAC" // 'mp4a'
+        case FourCharCode(0x61616368): return "HE-AAC" // 'aach'
         default:
             let bytes: [UInt8] = [
                 UInt8((value >> 24) & 0xff),
