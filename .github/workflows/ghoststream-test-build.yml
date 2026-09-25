@@ -1,0 +1,59 @@
+name: GhostStream 2 Test Build
+
+on:
+  push:
+    branches:
+      - design/ghoststream-2-architecture
+  workflow_dispatch:
+
+jobs:
+  ios-simulator:
+    name: iPhone/iPad Simulator Build
+    runs-on: macos-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Run GhostStream 2 regressions
+        run: |
+          set -euo pipefail
+          python3 regression_ghoststream2_api_models.py
+          python3 regression_ghoststream2_auth_ui.py
+          python3 regression_ghoststream2_identity.py
+          python3 regression_ghoststream2_navigation.py
+          python3 regression_ghoststream2_source_migration.py
+          python3 regression_ghoststream2_sync_deletion.py
+          python3 regression_ghoststream2_visible_shell.py
+          python3 regression_ghoststream2_pairing_ui.py
+
+      - name: Build iPhone/iPad simulator app
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project GhostStream.xcodeproj \
+            -scheme GhostStream \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            -derivedDataPath "$RUNNER_TEMP/GhostStreamDerivedData" \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Package simulator app
+        run: |
+          set -euo pipefail
+          APP="$RUNNER_TEMP/GhostStreamDerivedData/Build/Products/Debug-iphonesimulator/GhostStream.app"
+          test -d "$APP"
+          ditto -c -k --sequesterRsrc --keepParent "$APP" "$RUNNER_TEMP/GhostStream-Simulator-Test.app.zip"
+
+      - name: Upload simulator build
+        uses: actions/upload-artifact@v4
+        with:
+          name: GhostStream-Simulator-Test
+          path: ${{ runner.temp }}/GhostStream-Simulator-Test.app.zip
+          if-no-files-found: error
+          retention-days: 7
