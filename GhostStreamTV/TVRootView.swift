@@ -271,26 +271,26 @@ private struct TVBackground: View {
 
 private enum TVMainSection: String, CaseIterable, Identifiable {
     case home = "Home"
-    case live = "Live TV"
-    case movies = "Movies"
-    case series = "Series"
+    case library = "Library"
+    case devices = "Devices"
+    case health = "Source Health"
+    case settings = "Settings"
 
     var id: String { rawValue }
 
     var systemImage: String {
         switch self {
         case .home: return "house.fill"
-        case .live: return "tv.fill"
-        case .movies: return "film.fill"
-        case .series: return "rectangle.stack.fill"
+        case .library: return "rectangle.stack.fill"
+        case .devices: return "rectangle.connected.to.line.below"
+        case .health: return "waveform.path.ecg.rectangle.fill"
+        case .settings: return "gearshape.fill"
         }
     }
 }
 
 private enum TVTopFocus: Hashable {
     case section(TVMainSection)
-    case pairing
-    case sources
 }
 
 private struct TVMainShell: View {
@@ -302,7 +302,7 @@ private struct TVMainShell: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            TVTopNavigation(section: $section, showSources: $showSources, showPairing: $showPairing)
+            TVTopNavigation(section: $section)
                 .padding(.horizontal, 64)
                 .padding(.top, 26)
                 .padding(.bottom, 18)
@@ -312,12 +312,14 @@ private struct TVMainShell: View {
                 switch section {
                 case .home:
                     TVGhostHomeDashboard(section: $section)
-                case .live:
-                    TVLiveListBrowser()
-                case .movies:
-                    TVMovieGrid()
-                case .series:
-                    TVSeriesGrid()
+                case .library:
+                    TVLibraryHubView()
+                case .devices:
+                    TVDevicesView(showPairing: $showPairing)
+                case .health:
+                    TVSourceHealthView()
+                case .settings:
+                    TVSettingsView(showSources: $showSources, showPairing: $showPairing)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -328,16 +330,14 @@ private struct TVMainShell: View {
 
 private struct TVTopNavigation: View {
     @Binding var section: TVMainSection
-    @Binding var showSources: Bool
-    @Binding var showPairing: Bool
     @FocusState private var focusedItem: TVTopFocus?
 
     var body: some View {
         HStack(spacing: 26) {
-            Image("APKBrandLogo")
+            Image("GhostWordmark")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 160, height: 68, alignment: .leading)
+                .frame(width: 190, height: 68, alignment: .leading)
 
             Spacer().frame(width: 16)
 
@@ -355,28 +355,6 @@ private struct TVTopNavigation: View {
             }
 
             Spacer()
-
-            Button { showPairing = true } label: {
-                TVTopNavLabel(
-                    title: "Pair",
-                    systemImage: "qrcode",
-                    selected: false,
-                    focused: focusedItem == .pairing
-                )
-            }
-            .buttonStyle(TVGhostFocusStyle())
-            .focused($focusedItem, equals: .pairing)
-
-            Button { showSources = true } label: {
-                TVTopNavLabel(
-                    title: "Sources",
-                    systemImage: "externaldrive.fill",
-                    selected: false,
-                    focused: focusedItem == .sources
-                )
-            }
-            .buttonStyle(TVGhostFocusStyle())
-            .focused($focusedItem, equals: .sources)
         }
         .focusSection()
     }
@@ -449,26 +427,26 @@ private struct TVGhostHomeDashboard: View {
                 TVHomeLiveRow(section: $section)
 
                 if !featuredMovies.isEmpty {
-                    TVHomeSectionHeader(title: "Movies", action: { section = .movies })
+                    TVHomeSectionHeader(title: "Movies", action: { section = .library })
                     HStack(alignment: .top, spacing: 24) {
                         TVHomeLaunchCard(
                             title: "Movies",
                             subtitle: "Browse your movie library",
                             icon: "film.fill",
-                            action: { section = .movies }
+                            action: { section = .library }
                         )
                         TVMovieShelf(items: featuredMovies)
                     }
                 }
 
                 if !featuredSeries.isEmpty {
-                    TVHomeSectionHeader(title: "Series", action: { section = .series })
+                    TVHomeSectionHeader(title: "Series", action: { section = .library })
                     HStack(alignment: .top, spacing: 24) {
                         TVHomeLaunchCard(
                             title: "Series",
                             subtitle: "Binge your favorites",
                             icon: "rectangle.stack.fill",
-                            action: { section = .series }
+                            action: { section = .library }
                         )
                         TVSeriesShelf(items: featuredSeries)
                     }
@@ -520,7 +498,7 @@ private struct TVGhostHomeHero: View {
                     .padding(.top, 2)
 
                 HStack(spacing: 18) {
-                    Button { section = .movies } label: {
+                    Button { section = .library } label: {
                         Label("Continue Watching", systemImage: "play.fill")
                             .font(.headline.weight(.bold))
                             .foregroundStyle(.white)
@@ -532,7 +510,7 @@ private struct TVGhostHomeHero: View {
                     .buttonStyle(TVGhostFocusStyle())
                     .tvGhostFocus(cornerRadius: 27)
 
-                    Button { section = .live } label: {
+                    Button { section = .library } label: {
                         Label("Browse Content", systemImage: "square.grid.2x2")
                             .font(.headline.weight(.bold))
                             .foregroundStyle(.white)
@@ -755,17 +733,17 @@ private struct TVHomeLiveRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            TVHomeSectionHeader(title: "Live TV", action: { section = .live })
+            TVHomeSectionHeader(title: "Live TV", action: { section = .library })
             HStack(spacing: 20) {
                 TVHomeLaunchCard(
                     title: "Live TV",
                     subtitle: "Watch live channels",
                     icon: "tv.fill",
-                    action: { section = .live }
+                    action: { section = .library }
                 )
 
                 ForEach(Array(library.liveCategories.prefix(5))) { category in
-                    Button { section = .live } label: {
+                    Button { section = .library } label: {
                         VStack(alignment: .leading, spacing: 12) {
                             Spacer()
                             Image(systemName: "waveform.path.ecg.rectangle")
