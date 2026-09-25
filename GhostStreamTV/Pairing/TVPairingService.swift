@@ -220,6 +220,7 @@ enum TVSessionVault {
 }
 
 actor TVPairingService {
+    static let shared = TVPairingService()
     static let productionBaseURL = URL(string: "https://ghoststreams.ink/api/v1")!
 
     private let baseURL: URL
