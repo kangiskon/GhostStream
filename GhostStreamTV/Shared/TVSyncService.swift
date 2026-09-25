@@ -17,6 +17,26 @@ actor TVSyncService {
         self.encoder = encoder
     }
 
+    func fetchDevices() async throws -> [TVAccountDeviceDTO] {
+        let token = try await TVPairingService.shared.validAccessToken()
+        return try await request(
+            path: "devices",
+            method: "GET",
+            accessToken: token,
+            body: Optional<String>.none
+        )
+    }
+
+    func fetchDiagnostics(sourceID: UUID) async throws -> [TVDiagnosticSummaryDTO] {
+        let token = try await TVPairingService.shared.validAccessToken()
+        return try await request(
+            path: "diagnostics/\(sourceID.uuidString)",
+            method: "GET",
+            accessToken: token,
+            body: Optional<String>.none
+        )
+    }
+
     func pullProgress() async throws {
         let token = try await TVPairingService.shared.validAccessToken()
         let values: [TVPlaybackProgressRecord] = try await request(
@@ -107,4 +127,60 @@ private struct TVSyncErrorEnvelope: Codable {
 
 private struct TVSyncErrorDetail: Codable {
     let code: String?
+}
+
+
+struct TVAccountDeviceDTO: Codable, Equatable, Identifiable {
+    let id: UUID
+    let displayName: String
+    let platform: String
+    let osVersion: String
+    let publicKey: String
+    let trustState: String
+    let lastSeenAt: Date
+    let revokedAt: Date?
+
+    enum CodingKeys: String, CodingKey {
+        case id, platform
+        case displayName = "display_name"
+        case osVersion = "os_version"
+        case publicKey = "public_key"
+        case trustState = "trust_state"
+        case lastSeenAt = "last_seen_at"
+        case revokedAt = "revoked_at"
+    }
+}
+
+struct TVDiagnosticSummaryDTO: Codable, Equatable, Identifiable {
+    let id: UUID
+    let sourceID: UUID
+    let deviceClass: String
+    let healthScore: Int
+    let responseTimeMs: Double?
+    let latencyMs: Double?
+    let bitrateMbps: Double?
+    let width: Int?
+    let height: Int?
+    let videoCodec: String?
+    let audioCodec: String?
+    let container: String?
+    let bufferingEvents: Int
+    let errorCategory: String?
+    let compatibility: String?
+    let createdAt: Date
+
+    enum CodingKeys: String, CodingKey {
+        case id, width, height, container, compatibility
+        case sourceID = "source_id"
+        case deviceClass = "device_class"
+        case healthScore = "health_score"
+        case responseTimeMs = "response_time_ms"
+        case latencyMs = "latency_ms"
+        case bitrateMbps = "bitrate_mbps"
+        case videoCodec = "video_codec"
+        case audioCodec = "audio_codec"
+        case bufferingEvents = "buffering_events"
+        case errorCategory = "error_category"
+        case createdAt = "created_at"
+    }
 }
