@@ -9,6 +9,8 @@ struct PlaybackProgressRecord: Codable, Equatable, Identifiable {
     let sourceID: UUID
     let contentKind: PlaybackContentKind
     let contentID: String
+    var title: String?
+    var seriesID: Int?
     var positionSeconds: Double
     var durationSeconds: Double
     var completed: Bool
@@ -22,6 +24,8 @@ struct PlaybackProgressRecord: Codable, Equatable, Identifiable {
         case sourceID = "source_id"
         case contentKind = "content_kind"
         case contentID = "content_id"
+        case title
+        case seriesID = "series_id"
         case positionSeconds = "position_seconds"
         case durationSeconds = "duration_seconds"
         case completed
@@ -47,6 +51,8 @@ final class PlaybackProgressStore: ObservableObject {
         sourceID: UUID,
         contentKind: PlaybackContentKind,
         contentID: String,
+        title: String? = nil,
+        seriesID: Int? = nil,
         positionSeconds: Double,
         durationSeconds: Double,
         completed: Bool,
@@ -59,6 +65,8 @@ final class PlaybackProgressStore: ObservableObject {
             sourceID: sourceID,
             contentKind: contentKind,
             contentID: contentID,
+            title: title,
+            seriesID: seriesID,
             positionSeconds: boundedPosition,
             durationSeconds: safeDuration,
             completed: completed,
