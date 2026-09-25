@@ -119,3 +119,42 @@ struct APIErrorEnvelope: Codable, Equatable {
 struct APIErrorResponse: Codable, Equatable {
     let detail: APIErrorEnvelope?
 }
+
+
+struct PairingClaimDTO: Codable, Equatable, Identifiable {
+    var id: UUID { pairingID }
+
+    let pairingID: UUID
+    let deviceID: UUID
+    let displayName: String
+    let platform: String
+    let osVersion: String
+    let publicKey: String
+    let expiresAt: Date
+
+    enum CodingKeys: String, CodingKey {
+        case platform
+        case pairingID = "pairing_id"
+        case deviceID = "device_id"
+        case displayName = "display_name"
+        case osVersion = "os_version"
+        case publicKey = "public_key"
+        case expiresAt = "expires_at"
+    }
+}
+
+struct PairingStateDTO: Codable, Equatable {
+    let pairingID: UUID
+    let state: String
+    let expiresAt: Date
+    let deviceID: UUID
+    let accountID: UUID?
+
+    enum CodingKeys: String, CodingKey {
+        case state
+        case pairingID = "pairing_id"
+        case expiresAt = "expires_at"
+        case deviceID = "device_id"
+        case accountID = "account_id"
+    }
+}
