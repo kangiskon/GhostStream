@@ -17,7 +17,7 @@ struct GhostStreamShellView: View {
                 .tabItem { Label("Library", systemImage: GhostStreamSection.library.icon) }
                 .tag(GhostStreamSection.library)
 
-            DeviceCommandCenterOverview()
+            DevicesView()
                 .tabItem { Label("Devices", systemImage: GhostStreamSection.devices.icon) }
                 .tag(GhostStreamSection.devices)
 
