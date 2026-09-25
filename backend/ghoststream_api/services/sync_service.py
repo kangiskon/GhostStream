@@ -90,6 +90,8 @@ def upsert_progress(db: DBSession, user: User, device_id: uuid.UUID, item: Playb
             source_id=item.source_id,
             content_kind=item.content_kind,
             content_id=item.content_id,
+            title=item.title,
+            series_id=item.series_id,
             position_seconds=item.position_seconds,
             duration_seconds=item.duration_seconds,
             completed=item.completed,
@@ -99,6 +101,8 @@ def upsert_progress(db: DBSession, user: User, device_id: uuid.UUID, item: Playb
         db.add(progress)
         changed = True
     elif as_utc(progress.updated_at) < as_utc(item.updated_at):
+        progress.title = item.title
+        progress.series_id = item.series_id
         progress.position_seconds = item.position_seconds
         progress.duration_seconds = item.duration_seconds
         progress.completed = item.completed
